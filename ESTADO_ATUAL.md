@@ -85,8 +85,14 @@
     Fixture real `tests/fixtures/tone_48k_stereo.wav` + 3 testes de decode.
     ⚠ **Não compilável localmente** (sandbox sem `libav*-dev`); só valida no CI.
     Limites dos testes conferidos com o ffmpeg CLI (48k→12000, 44.1k mono→11025).
-  - **Falta na fiação do 1.1:** backend miniaudio real de `IAudioDeviceService`
-    (device de saída rodando o callback) + integração no `app`.
+  - **Backend miniaudio** (`AudioOutput`): abre device de saída float e roda o
+    callback RT puxando de `AudioDeck::renderInto`. Guard `ATIVASTAGE_HAVE_MINIAUDIO`,
+    fora do ctest (precisa de hardware). Utilitário manual `audio_probe`
+    (decoder→deck→output) p/ ouvir na máquina. ⚠ **AudioOutput.cpp não compilável
+    no sandbox** (sem header do miniaudio); valida no CI/no Mac. Sintaxe do probe
+    conferida contra os headers reais.
+  - **Falta na fiação do 1.1:** enumeração/seleção real de device via miniaudio em
+    `IAudioDeviceService` (hoje stub) + integração no `app` (botão tocar/parar).
 
 Objetivo: provar o núcleo difícil antes de tudo. Entregas:
 - Alvo GUI `app` (Qt Quick) — cria `src/app/CMakeLists.txt`; a partir daqui o
