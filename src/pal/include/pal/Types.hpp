@@ -18,4 +18,12 @@ struct ScreenInfo {
     bool primary = false;
 };
 
+// Output audio device descriptor. Backed by miniaudio (WASAPI on Windows,
+// CoreAudio on macOS) in the real implementation; kept Qt-free like ScreenInfo.
+struct AudioDeviceInfo {
+    std::string id;         // backend-stable identifier
+    std::string name;       // human-readable name
+    bool isDefault = false; // system default output device
+};
+
 } // namespace pal

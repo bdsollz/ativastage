@@ -52,6 +52,7 @@ endif()
 # ---- Modules ---------------------------------------------------------------
 add_subdirectory(src/pal)
 add_subdirectory(src/persistence)
+add_subdirectory(src/audio)
 
 if(ATIVASTAGE_BUILD_APP AND EXISTS ${CMAKE_SOURCE_DIR}/src/app/CMakeLists.txt)
     add_subdirectory(src/app)

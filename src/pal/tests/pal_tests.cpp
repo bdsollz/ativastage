@@ -34,3 +34,20 @@ TEST_CASE("ScreenService reports at least one primary screen", "[pal][screen]") 
     REQUIRE(primary.height > 0);
     REQUIRE_FALSE(primary.id.empty());
 }
+
+TEST_CASE("AudioDeviceService enumerates and selects a device", "[pal][audio]") {
+    auto audio = pal::makeAudioDeviceService();
+    REQUIRE(audio != nullptr);
+
+    const auto devices = audio->outputDevices();
+    REQUIRE_FALSE(devices.empty());
+
+    const auto def = audio->defaultOutputDevice();
+    REQUIRE(def.has_value());
+    REQUIRE(def->isDefault);
+
+    // Selecting a known device succeeds; an unknown id is rejected.
+    REQUIRE(audio->selectOutputDevice(def->id));
+    REQUIRE(audio->selectedOutputDevice() == def->id);
+    REQUIRE_FALSE(audio->selectOutputDevice("no-such-device"));
+}

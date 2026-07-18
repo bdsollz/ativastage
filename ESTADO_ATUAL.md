@@ -3,7 +3,8 @@
 > Checkpoint vivo para retomada entre sessões. Como/quando atualizar:
 > [`docs/METODO_ESTADO.md`](docs/METODO_ESTADO.md).
 
-- **Última atualização:** 2026-07-18 (plano da Fase 1 escrito — ver `docs/plan/PLANO_FASE_1.md`)
+- **Última atualização:** 2026-07-18 (Fase 1 iniciada: Marco 1.0 no GitHub +
+  esqueleto do Marco 1.1 — ver `docs/plan/PLANO_FASE_1.md`)
 - **Fase corrente:** Fase 0 — Fundação **CONCLUÍDA ✅** (CI verde nas 2 plataformas,
   run `ec3d0c8`, 2m18s). Próxima: Fase 1 — Prova audiovisual.
 - **Versão:** 0.0.1 (ver arquivo `VERSION`)
@@ -63,9 +64,23 @@
 ## Próxima fase — Fase 1 (Prova audiovisual) ⚠ fase de risco
 
 **Plano de implementação detalhado: [`docs/plan/PLANO_FASE_1.md`](docs/plan/PLANO_FASE_1.md)**
-(marcos 1.0–1.6, ordem, arquivos, critérios de aceite, matriz de HW, gate). Retomada:
-começar pelo Marco 1.0 (reintroduzir ffmpeg+miniaudio no `vcpkg.json`, criar
-`src/app/CMakeLists.txt`, ligar `ATIVASTAGE_BUILD_APP`, reabilitar Qt no CI).
+(marcos 1.0–1.6, ordem, arquivos, critérios de aceite, matriz de HW, gate).
+
+**Progresso (branch `phase/1-av-proof`):**
+- **Marco 1.0 — no GitHub** (commit `83a8994`): ffmpeg+miniaudio de volta no
+  `vcpkg.json`; alvo Qt Quick `app` (`src/app/`, janela vazia); `ATIVASTAGE_BUILD_APP=ON`
+  nos presets debug; Qt 6.9.1 + cache binário do vcpkg no CI. ⚠ **Falta confirmar
+  CI verde** (1º build com Qt+ffmpeg — pode precisar ajuste).
+- **Marco 1.1 — esqueleto pronto (local, ainda não commitado):**
+  - `libpal`: `IAudioDeviceService` + `AudioDeviceInfo` (factory cross-platform,
+    stub determinístico; backend miniaudio real depois).
+  - `libaudio` (novo módulo): núcleo puro e RT-safe — `DeckState`/`DeckStateMachine`,
+    `RingBuffer` SPSC lock-free, `GainRamp`, `AudioDeck` com `renderInto` (corpo do
+    callback). Testes `audio_tests` (Catch2). **Compilado e testado com g++ local:
+    todos os checks passaram.**
+  - ADR-0004 (miniaudio + contrato do callback RT).
+  - **Falta na fiação do 1.1:** decoder FFmpeg (produtor do ring) + backend miniaudio
+    real de `IAudioDeviceService` + integração no `app`.
 
 Objetivo: provar o núcleo difícil antes de tudo. Entregas:
 - Alvo GUI `app` (Qt Quick) — cria `src/app/CMakeLists.txt`; a partir daqui o

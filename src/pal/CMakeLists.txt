@@ -1,5 +1,6 @@
 add_library(libpal STATIC
     src/Pal.cpp
+    src/AudioDeviceService.cpp
 )
 
 target_include_directories(libpal PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/include)
