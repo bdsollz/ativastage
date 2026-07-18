@@ -79,8 +79,14 @@
     callback). Testes `audio_tests` (Catch2). **Compilado e testado com g++ local:
     todos os checks passaram.**
   - ADR-0004 (miniaudio + contrato do callback RT).
-  - **Falta na fiação do 1.1:** decoder FFmpeg (produtor do ring) + backend miniaudio
-    real de `IAudioDeviceService` + integração no `app`.
+  - **Decoder FFmpeg** (`AudioFileDecoder`, produtor do ring): open/readFrames/
+    seekToStart via libav* 7.x (resample p/ float interleaved). Compilado só
+    quando FFmpeg é achado (guard `ATIVASTAGE_HAVE_FFMPEG`; núcleo puro resiliente).
+    Fixture real `tests/fixtures/tone_48k_stereo.wav` + 3 testes de decode.
+    ⚠ **Não compilável localmente** (sandbox sem `libav*-dev`); só valida no CI.
+    Limites dos testes conferidos com o ffmpeg CLI (48k→12000, 44.1k mono→11025).
+  - **Falta na fiação do 1.1:** backend miniaudio real de `IAudioDeviceService`
+    (device de saída rodando o callback) + integração no `app`.
 
 Objetivo: provar o núcleo difícil antes de tudo. Entregas:
 - Alvo GUI `app` (Qt Quick) — cria `src/app/CMakeLists.txt`; a partir daqui o

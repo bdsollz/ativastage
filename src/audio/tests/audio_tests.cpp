@@ -3,6 +3,11 @@
 #include "audio/GainRamp.hpp"
 #include "audio/RingBuffer.hpp"
 
+#ifdef ATIVASTAGE_HAVE_FFMPEG
+#include "audio/AudioFileDecoder.hpp"
+#include <string>
+#endif
+
 #include <catch2/catch_test_macros.hpp>
 
 #include <vector>
@@ -179,3 +184,84 @@ TEST_CASE("Fade-out drives output to zero and completes", "[audio][deck]") {
     REQUIRE(deck.pollFadeComplete());
     REQUIRE(deck.state() == DeckState::Ready);
 }
+
+// --------------------------------------------------------------------------
+// AudioFileDecoder (FFmpeg) — runs only where FFmpeg is available.
+// Decodes the committed 48 kHz / stereo / 0.25 s tone fixture.
+// --------------------------------------------------------------------------
+#ifdef ATIVASTAGE_HAVE_FFMPEG
+TEST_CASE("Decoder resamples the tone fixture to interleaved float", "[audio][decode]") {
+    const std::string path =
+        std::string(AUDIO_TEST_FIXTURE_DIR) + "/tone_48k_stereo.wav";
+
+    AudioFileDecoder dec;
+    REQUIRE(dec.open(path, 48000, 2));
+    REQUIRE(dec.sourceSampleRate() == 48000);
+    REQUIRE(dec.sourceChannels() == 2);
+    REQUIRE(dec.targetChannels() == 2);
+
+    std::vector<float> buf(1024 * 2);
+    std::size_t total = 0;
+    bool nonZeroSeen = false;
+    for (;;) {
+        const std::size_t frames = dec.readFrames(buf.data(), 1024);
+        if (frames == 0) {
+            break;
+        }
+        total += frames;
+        for (std::size_t i = 0; i < frames * 2; ++i) {
+            if (buf[i] != 0.0f) {
+                nonZeroSeen = true;
+            }
+        }
+    }
+    // ~0.25 s at 48 kHz ≈ 12000 frames; allow slack for resampler edges.
+    REQUIRE(total > 10000);
+    REQUIRE(total < 14000);
+    REQUIRE(nonZeroSeen);
+}
+
+TEST_CASE("Decoder resamples to a different rate and mono", "[audio][decode]") {
+    const std::string path =
+        std::string(AUDIO_TEST_FIXTURE_DIR) + "/tone_48k_stereo.wav";
+
+    AudioFileDecoder dec;
+    REQUIRE(dec.open(path, 44100, 1)); // 48k stereo -> 44.1k mono
+    REQUIRE(dec.targetChannels() == 1);
+
+    std::vector<float> buf(2048);
+    std::size_t total = 0;
+    for (;;) {
+        const std::size_t frames = dec.readFrames(buf.data(), 2048);
+        if (frames == 0) {
+            break;
+        }
+        total += frames;
+    }
+    // 0.25 s at 44.1 kHz ≈ 11025 frames.
+    REQUIRE(total > 9000);
+    REQUIRE(total < 13000);
+}
+
+TEST_CASE("Decoder seekToStart allows re-reading (loop)", "[audio][decode]") {
+    const std::string path =
+        std::string(AUDIO_TEST_FIXTURE_DIR) + "/tone_48k_stereo.wav";
+
+    AudioFileDecoder dec;
+    REQUIRE(dec.open(path, 48000, 2));
+
+    std::vector<float> buf(1024 * 2);
+    std::size_t first = 0;
+    while (std::size_t f = dec.readFrames(buf.data(), 1024)) {
+        first += f;
+    }
+    REQUIRE(first > 10000);
+
+    REQUIRE(dec.seekToStart());
+    std::size_t second = 0;
+    while (std::size_t f = dec.readFrames(buf.data(), 1024)) {
+        second += f;
+    }
+    REQUIRE(second > 10000);
+}
+#endif // ATIVASTAGE_HAVE_FFMPEG
