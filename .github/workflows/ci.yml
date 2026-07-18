@@ -30,21 +30,24 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v5
 
-      - name: Setup vcpkg
-        uses: lukka/run-vcpkg@v11
-        with:
-          vcpkgGitCommitId: ${{ vars.VCPKG_COMMIT || 'master' }}
+      # Ninja + MSVC precisa do ambiente de desenvolvedor do Visual Studio no PATH.
+      - name: Setup MSVC environment (Windows)
+        if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
 
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v4
-        with:
-          version: "6.9.*"
-          cache: true
+      # Usa o vcpkg já pré-instalado nos runners (evita bootstrap frágil).
+      - name: Point to preinstalled vcpkg
+        shell: bash
+        run: echo "VCPKG_ROOT=$VCPKG_INSTALLATION_ROOT" >> "$GITHUB_ENV"
+
+      # Preenche builtin-baseline no manifesto conforme a árvore de ports do
+      # runner (só no CI; não é commitado).
+      - name: Pin vcpkg baseline
+        shell: bash
+        run: "$VCPKG_INSTALLATION_ROOT/vcpkg x-update-baseline --add-initial-baseline"
 
       - name: Configure
         run: cmake --preset ${{ matrix.preset }}
-        env:
-          VCPKG_ROOT: ${{ github.workspace }}/vcpkg
 
       - name: Build
         run: cmake --build --preset ${{ matrix.preset }}

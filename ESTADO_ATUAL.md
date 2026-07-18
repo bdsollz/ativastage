@@ -44,17 +44,30 @@
   (b) alvo SQLite trocado de `SQLite::SQLite3` (depreciado) para
   `SQLite3::SQLite3`.
 
+## Git / GitHub
+
+- Repositório: **https://github.com/bdsollz/ativastage** (branch `phase/0-foundation`).
+- Commit inicial `c005644` enviado com sucesso (push exigiu PAT classic com
+  escopos `repo` + `workflow`). Helpers de duplo-clique em `scripts/`:
+  `git-setup.command`, `git-push.command`.
+
 ## O que falta na Fase 0 (próximos passos concretos)
 
-1. **Fixar o baseline do vcpkg**: definir `builtin-baseline` (commit) em
-   `vcpkg.json` e/ou a var `VCPKG_COMMIT` no repositório do GitHub para builds
-   reproduzíveis. Hoje o CI usa `master`.
-2. **Git init + commit inicial**: rodar `scripts/git-setup.command` (duplo-clique)
-   na máquina — o git não roda pelo ambiente de IA aqui porque o mount bloqueia
-   exclusões (ficou um `.git` parcial que o script recomeça limpo). Cria branch
-   `phase/0-foundation` e o commit inicial.
-3. **Primeiro push + CI verde** nas duas plataformas (critério de saída da Fase 0).
-4. **Pipeline de empacotamento mínimo** (dmg/zip sem assinatura) — esboço.
+1. **CI verde** nas duas plataformas (macOS + Windows). 1ª execução (`c005644`)
+   falhou em ~23s no setup do vcpkg (`run-vcpkg` com `master` inválido). CI
+   reescrito: usa vcpkg pré-instalado do runner, `x-update-baseline` p/ baseline,
+   `msvc-dev-cmd` no Windows, sem Qt (não usado nos presets debug da Fase 0).
+   → Falta commitar+push (rodar `scripts/git-sync.command`) e conferir verde.
+2. **Pipeline de empacotamento mínimo** (dmg/zip sem assinatura) — esboço.
+
+## Notas
+
+- `vcpkg.json` enxugado p/ Fase 0: só `catch2` + `sqlite3[fts5]`.
+  **ffmpeg e libsodium voltam na Fase 1** (quando forem de fato usados/compilados;
+  evita build de ffmpeg from-source no CI agora). O proof local de ffmpeg já roda
+  via Homebrew no `AtivaStage.command`.
+- Helpers git em `scripts/`: `git-setup` (init+commit), `git-push` (remote+push),
+  `git-sync` (add+commit+push, para iterar).
 
 ## Como compilar/testar agora
 
