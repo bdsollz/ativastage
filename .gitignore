@@ -1,0 +1,40 @@
+# Build
+/build/
+/build-*/
+/out/
+cmake-build-*/
+*.o
+*.obj
+*.a
+*.lib
+*.dll
+*.dylib
+*.so
+
+# vcpkg
+/vcpkg/
+/vcpkg_installed/
+
+# IDE
+.vscode/
+.idea/
+*.user
+.DS_Store
+
+# Qt
+*.qmlc
+*.jsc
+moc_*.cpp
+qrc_*.cpp
+ui_*.h
+
+# App bundle / artefatos locais do auto-compilar
+/*.app/
+/dist/
+
+# Logs / dados locais
+*.log
+*.db
+*.db-wal
+*.db-shm
+session_state.json

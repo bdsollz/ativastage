@@ -1,0 +1,65 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 27, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/build/${presetName}",
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": {
+          "type": "FILEPATH",
+          "value": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+        },
+        "ATIVASTAGE_BUILD_TESTS": "ON"
+      }
+    },
+    {
+      "name": "mac-debug",
+      "inherits": "base",
+      "displayName": "macOS Debug",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "mac-release",
+      "inherits": "base",
+      "displayName": "macOS Release",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ATIVASTAGE_BUILD_APP": "ON"
+      }
+    },
+    {
+      "name": "win-debug",
+      "inherits": "base",
+      "displayName": "Windows Debug",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "win-release",
+      "inherits": "base",
+      "displayName": "Windows Release",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "ATIVASTAGE_BUILD_APP": "ON"
+      }
+    }
+  ],
+  "buildPresets": [
+    { "name": "mac-debug",   "configurePreset": "mac-debug" },
+    { "name": "mac-release", "configurePreset": "mac-release" },
+    { "name": "win-debug",   "configurePreset": "win-debug" },
+    { "name": "win-release", "configurePreset": "win-release" }
+  ],
+  "testPresets": [
+    { "name": "mac-debug",   "configurePreset": "mac-debug",   "output": { "outputOnFailure": true } },
+    { "name": "mac-release", "configurePreset": "mac-release", "output": { "outputOnFailure": true } },
+    { "name": "win-debug",   "configurePreset": "win-debug",   "output": { "outputOnFailure": true } },
+    { "name": "win-release", "configurePreset": "win-release", "output": { "outputOnFailure": true } }
+  ]
+}

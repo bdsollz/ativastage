@@ -1,0 +1,25 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "ativastage",
+  "version-string": "0.0.1",
+  "description": "AtivaStage — church audiovisual projection and operation software",
+  "dependencies": [
+    "catch2",
+    "libsodium",
+    {
+      "name": "sqlite3",
+      "features": ["fts5"]
+    },
+    {
+      "name": "ffmpeg",
+      "default-features": false,
+      "features": [
+        "avcodec",
+        "avformat",
+        "avfilter",
+        "swscale",
+        "swresample"
+      ]
+    }
+  ]
+}
