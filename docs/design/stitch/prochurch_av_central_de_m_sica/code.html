@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProChurch AV - Music Central</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#10131a",
+                        "primary-container": "#4d8eff",
+                        "on-secondary": "#472a00",
+                        "inverse-on-surface": "#2e3038",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-tint": "#adc6ff",
+                        "surface-bright": "#363941",
+                        "on-secondary-container": "#5b3800",
+                        "inverse-primary": "#005ac2",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#8c909f",
+                        "background": "#10131a",
+                        "surface-dim": "#10131a",
+                        "secondary": "#ffb95f",
+                        "on-background": "#e1e2ec",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#68000a",
+                        "on-tertiary-fixed": "#410004",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface": "#e1e2ec",
+                        "secondary-fixed": "#ffddb8",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "surface-container": "#1d2027",
+                        "on-primary-fixed": "#001a42",
+                        "on-secondary-fixed": "#2a1700",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#ff5451",
+                        "tertiary": "#ffb3ad",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-container": "#5c0008",
+                        "surface-container-low": "#191b23",
+                        "primary": "#adc6ff",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#32353c",
+                        "surface-container-high": "#272a31",
+                        "on-primary": "#002e6a",
+                        "surface-container-lowest": "#0b0e15",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#424754",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#32353c",
+                        "secondary-container": "#ee9800",
+                        "inverse-surface": "#e1e2ec",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-surface-variant": "#c2c6d6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "12px",
+                        "unit": "4px",
+                        "stack-gap": "8px",
+                        "margin-page": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .panel-border { border: 1px solid #262626; }
+        .live-border { border: 2px solid #3B82F6; }
+        .next-border { border: 2px solid #F59E0B; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #10131a; }
+        ::-webkit-scrollbar-thumb { background: #32353c; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #424754; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen w-full overflow-hidden flex font-body-md text-body-md">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-primary docked full-height left-0 w-64 border-r border-outline-variant dark:border-outline-variant flat no shadows flex flex-col h-full py-panel-padding hidden md:flex z-50 shrink-0">
+<!-- Header -->
+<div class="px-4 pb-6 border-b border-outline-variant mb-4 flex flex-col gap-2">
+<span class="text-headline-md font-headline-md font-bold text-primary">Main Sanctuary</span>
+<div class="flex items-center gap-2">
+<img alt="Church Admin" class="w-8 h-8 rounded-full object-cover" data-alt="A professional headshot of a church media director wearing headphones in a darkened control room. Dramatic, focused lighting highlighting professional broadcast equipment in the background. High contrast corporate modern aesthetic. Deep shadows with bright cool accent lights." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCni6ARAT7vTY0tRs7xcYWEKFNizxZQFu8HRnqJf5TW_GXa9pdLlQQc8Lc3n2rfLlqCgHyjHiBMowwnU9M2LysDDW-EDkkO7eAK3m3sxebC3bpyhdpOh_38nsmiCokOIa2Jin3bjw9A-GxZAzb9JUQp2U8vxLePfCbH5QBNvWRq_WTRaHhNl9P1dIt6dNZbgHY76jk5m3VIfPWSFEVFTX36SbFQg6SltUuRkcUWvHKp46K96r0o_9Ff"/>
+<div>
+<div class="text-label-md font-label-md text-on-surface">Church Admin</div>
+<div class="text-label-sm font-label-sm text-error flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-error animate-pulse"></span> On Air</div>
+</div>
+</div>
+<button class="mt-4 bg-error text-on-error py-2 rounded-DEFAULT text-label-md font-label-md font-bold hover:brightness-110 transition-all uppercase w-full">GO LIVE</button>
+</div>
+<!-- Main Tabs -->
+<ul class="flex-1 flex flex-col gap-1 px-2">
+<!-- Active Tab: Music -->
+<li>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary bg-primary-container/10 border-l-4 border-primary scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">music_note</span>
+<span class="text-label-md font-label-md">Music</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">book</span>
+<span class="text-label-md font-label-md">Bible</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">present_to_all</span>
+<span class="text-label-md font-label-md">Presentation</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">graphic_eq</span>
+<span class="text-label-md font-label-md">Audio</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">library_books</span>
+<span class="text-label-md font-label-md">Library</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</li>
+</ul>
+<!-- Footer Tabs -->
+<ul class="px-2 mt-auto border-t border-outline-variant pt-4 flex flex-col gap-1">
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-label-md font-label-md">Help</span>
+</a>
+</li>
+<li>
+<a class="flex items-center gap-3 text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined">sensors</span>
+<span class="text-label-md font-label-md">Status</span>
+</a>
+</li>
+</ul>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col h-full relative">
+<!-- TopNavBar (Shared Component) -->
+<header class="bg-surface dark:bg-surface text-primary dark:text-primary docked full-width top-0 border-b border-outline-variant dark:border-outline-variant flat no shadows flex justify-between items-center w-full px-gutter h-16 shrink-0 z-40">
+<div class="flex items-center gap-4">
+<span class="text-title-lg font-title-lg font-black text-primary-container dark:text-primary-container md:hidden">ProChurch AV</span>
+<span class="text-headline-md font-headline-md text-on-surface hidden md:block">Music Central</span>
+</div>
+<div class="flex items-center gap-4 text-on-surface-variant">
+<button class="p-2 hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-colors rounded-full opacity-80 transition-opacity"><span class="material-symbols-outlined">schedule</span></button>
+<button class="p-2 hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-colors rounded-full opacity-80 transition-opacity"><span class="material-symbols-outlined">sync</span></button>
+<button class="p-2 hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-colors rounded-full opacity-80 transition-opacity"><span class="material-symbols-outlined">health_metrics</span></button>
+<button class="p-2 hover:bg-surface-container-highest dark:hover:bg-surface-container-highest transition-colors rounded-full opacity-80 transition-opacity"><span class="material-symbols-outlined">settings</span></button>
+</div>
+</header>
+<!-- Workspace Layout -->
+<main class="flex-1 flex overflow-hidden p-unit gap-unit bg-background pb-20"> <!-- pb-20 to clear fixed bottom transport -->
+<!-- Left Panel (Library) -->
+<section class="w-80 bg-surface-container flex flex-col rounded-DEFAULT panel-border overflow-hidden shrink-0">
+<div class="p-panel-padding border-b border-outline-variant bg-surface-container-highest">
+<div class="relative mb-3">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-sm">search</span>
+<input class="w-full bg-surface border border-outline-variant rounded-DEFAULT pl-9 pr-3 py-2 text-body-md font-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary placeholder-on-surface-variant" placeholder="Search library..." type="text"/>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 bg-surface-container-highest border border-outline-variant rounded-DEFAULT py-1.5 text-label-md font-label-md text-primary font-bold">All Songs</button>
+<button class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-1.5 text-label-md font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Favorites</button>
+<button class="flex-1 bg-surface-container-lowest border border-outline-variant rounded-DEFAULT py-1.5 text-label-md font-label-md text-on-surface-variant hover:bg-surface-container transition-colors">Recent</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<!-- Song List Item (Active) -->
+<div class="border-b border-outline-variant p-3 cursor-pointer bg-primary-container/5 border-l-4 border-l-primary hover:bg-surface-container-highest transition-colors flex justify-between items-center group">
+<div>
+<div class="text-title-md font-title-md text-on-surface mb-1">Amazing Grace</div>
+<div class="text-body-md font-body-md text-on-surface-variant">Chris Tomlin • Key: G</div>
+</div>
+<span class="material-symbols-outlined text-primary opacity-100 group-hover:scale-110 transition-transform">play_circle</span>
+</div>
+<!-- Song List Item -->
+<div class="border-b border-outline-variant p-3 cursor-pointer hover:bg-surface-container-highest transition-colors flex justify-between items-center group">
+<div>
+<div class="text-title-md font-title-md text-on-surface mb-1">How Great Is Our God</div>
+<div class="text-body-md font-body-md text-on-surface-variant">Chris Tomlin • Key: C</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<!-- Song List Item -->
+<div class="border-b border-outline-variant p-3 cursor-pointer hover:bg-surface-container-highest transition-colors flex justify-between items-center group">
+<div>
+<div class="text-title-md font-title-md text-on-surface mb-1">10,000 Reasons</div>
+<div class="text-body-md font-body-md text-on-surface-variant">Matt Redman • Key: G</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+<!-- Song List Item -->
+<div class="border-b border-outline-variant p-3 cursor-pointer hover:bg-surface-container-highest transition-colors flex justify-between items-center group">
+<div>
+<div class="text-title-md font-title-md text-on-surface mb-1">Cornerstone</div>
+<div class="text-body-md font-body-md text-on-surface-variant">Hillsong • Key: C</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant opacity-0 group-hover:opacity-100 transition-opacity">play_circle</span>
+</div>
+</div>
+</section>
+<!-- Middle Panel (Song Sequence/Editor) -->
+<section class="flex-1 bg-surface-container flex flex-col rounded-DEFAULT panel-border overflow-hidden min-w-[300px]">
+<div class="p-panel-padding border-b border-outline-variant bg-surface-container-highest flex justify-between items-center">
+<div>
+<h2 class="text-headline-md font-headline-md text-on-surface">Amazing Grace</h2>
+<p class="text-label-md font-label-md text-on-surface-variant">Arrangement: Standard Worship • Key: G • BPM: 72</p>
+</div>
+<button class="bg-surface border border-outline-variant text-on-surface px-3 py-1.5 rounded-DEFAULT text-label-md font-label-md hover:bg-surface-container-highest transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">edit</span> Edit Sequence
+                    </button>
+</div>
+<div class="flex-1 overflow-y-auto p-4 flex flex-col gap-3">
+<!-- Sequence Block (Intro) -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-3 hover:bg-surface-container-highest transition-colors cursor-pointer group">
+<div class="text-label-md font-label-md text-secondary mb-2 flex items-center gap-2 uppercase tracking-wider">
+<span class="w-1.5 h-1.5 bg-secondary rounded-full"></span> Intro (4 Bars)
+                        </div>
+<div class="text-body-md font-body-md text-on-surface-variant italic">[Instrumental]</div>
+</div>
+<!-- Sequence Block (Verse 1 - Active/Previewing) -->
+<div class="bg-surface border border-primary rounded-DEFAULT p-3 bg-primary-container/5 relative overflow-hidden cursor-pointer">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-primary"></div>
+<div class="text-label-md font-label-md text-primary mb-2 flex justify-between items-center uppercase tracking-wider pl-2">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Verse 1
+                            </div>
+<span class="text-xs bg-primary text-on-primary px-2 py-0.5 rounded-sm">PREVIEW</span>
+</div>
+<div class="text-body-md font-body-md text-on-surface leading-relaxed pl-2 font-mono-md">
+                            Amazing grace how sweet the sound<br/>
+                            That saved a wretch like me
+                        </div>
+</div>
+<!-- Sequence Block (Chorus - Next) -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-3 hover:bg-surface-container-highest transition-colors cursor-pointer border-l-4 border-l-tertiary">
+<div class="text-label-md font-label-md text-tertiary mb-2 flex items-center gap-2 uppercase tracking-wider">
+<span class="w-1.5 h-1.5 bg-tertiary rounded-full"></span> Chorus
+                        </div>
+<div class="text-body-md font-body-md text-on-surface-variant leading-relaxed font-mono-md">
+                            My chains are gone, I've been set free<br/>
+                            My God, my Savior has ransomed me
+                        </div>
+</div>
+<!-- Sequence Block (Verse 2) -->
+<div class="bg-surface border border-outline-variant rounded-DEFAULT p-3 hover:bg-surface-container-highest transition-colors cursor-pointer">
+<div class="text-label-md font-label-md text-primary mb-2 flex items-center gap-2 uppercase tracking-wider">
+<span class="w-1.5 h-1.5 bg-primary rounded-full"></span> Verse 2
+                       </div>
+<div class="text-body-md font-body-md text-on-surface-variant leading-relaxed font-mono-md">
+                           'Twas grace that taught my heart to fear<br/>
+                           And grace my fears relieved
+                       </div>
+</div>
+</div>
+</section>
+<!-- Right Panel (Current Presentation / Slides) -->
+<section class="flex-[1.5] bg-surface-container flex flex-col rounded-DEFAULT panel-border overflow-hidden min-w-[400px]">
+<div class="p-panel-padding border-b border-outline-variant bg-surface-container-highest flex justify-between items-center">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-error animate-pulse">live_tv</span>
+<h2 class="text-title-md font-title-md text-on-surface uppercase tracking-wider font-bold">Live Output</h2>
+</div>
+<div class="flex gap-2">
+<button class="p-1.5 bg-surface border border-outline-variant rounded hover:bg-surface-container-highest transition-colors"><span class="material-symbols-outlined text-sm">grid_view</span></button>
+<button class="p-1.5 bg-surface-container-highest border border-primary rounded text-primary"><span class="material-symbols-outlined text-sm">view_list</span></button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-4 bg-surface-dim">
+<div class="grid grid-cols-2 gap-4">
+<!-- Slide (Live) -->
+<div class="group cursor-pointer">
+<div class="aspect-video bg-[#000000] rounded-lg live-border relative overflow-hidden mb-2 flex items-center justify-center p-4">
+<!-- Simulated Slide Content -->
+<div class="text-center w-full">
+<div class="text-[#ffffff] font-display-lg text-2xl md:text-3xl font-bold drop-shadow-md leading-tight">Amazing grace how sweet the sound</div>
+</div>
+<!-- Overlays -->
+<div class="absolute top-2 left-2 bg-error text-on-error text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider flex items-center gap-1">
+<span class="w-1.5 h-1.5 bg-on-error rounded-full animate-pulse"></span> LIVE
+                                </div>
+</div>
+<div class="text-label-md font-label-md text-on-surface flex justify-between px-1">
+<span>V1 - Slide 1</span>
+<span class="text-primary font-bold">Active</span>
+</div>
+</div>
+<!-- Slide (Next) -->
+<div class="group cursor-pointer">
+<div class="aspect-video bg-[#000000] rounded-lg next-border relative overflow-hidden mb-2 flex items-center justify-center p-4 opacity-90 group-hover:opacity-100 transition-opacity">
+<div class="text-center w-full">
+<div class="text-[#ffffff] font-display-lg text-2xl md:text-3xl font-bold drop-shadow-md leading-tight">That saved a wretch like me</div>
+</div>
+<div class="absolute top-2 left-2 bg-secondary text-on-secondary text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                                    NEXT
+                                </div>
+</div>
+<div class="text-label-md font-label-md text-on-surface-variant flex justify-between px-1 group-hover:text-on-surface transition-colors">
+<span>V1 - Slide 2</span>
+</div>
+</div>
+<!-- Slide (Upcoming) -->
+<div class="group cursor-pointer">
+<div class="aspect-video bg-[#000000] rounded-lg border border-outline-variant relative overflow-hidden mb-2 flex items-center justify-center p-4 opacity-60 hover:opacity-100 hover:border-primary-container transition-all">
+<div class="text-center w-full">
+<div class="text-[#ffffff] font-display-lg text-2xl md:text-3xl font-bold drop-shadow-md leading-tight">I once was lost but now am found</div>
+</div>
+</div>
+<div class="text-label-md font-label-md text-on-surface-variant flex justify-between px-1 group-hover:text-on-surface transition-colors">
+<span>V1 - Slide 3</span>
+</div>
+</div>
+<!-- Slide (Upcoming) -->
+<div class="group cursor-pointer">
+<div class="aspect-video bg-[#000000] rounded-lg border border-outline-variant relative overflow-hidden mb-2 flex items-center justify-center p-4 opacity-60 hover:opacity-100 hover:border-primary-container transition-all">
+<div class="text-center w-full">
+<div class="text-[#ffffff] font-display-lg text-2xl md:text-3xl font-bold drop-shadow-md leading-tight">Was blind but now I see</div>
+</div>
+</div>
+<div class="text-label-md font-label-md text-on-surface-variant flex justify-between px-1 group-hover:text-on-surface transition-colors">
+<span>V1 - Slide 4</span>
+</div>
+</div>
+<!-- Slide (Upcoming - Chorus) -->
+<div class="group cursor-pointer">
+<div class="aspect-video bg-surface-container-highest rounded-lg border border-outline-variant relative overflow-hidden mb-2 flex items-center justify-center p-4 opacity-60 hover:opacity-100 hover:border-primary-container transition-all bg-[url('placeholder')] bg-cover bg-center" data-alt="A dark, abstract motion graphics background suitable for modern church worship lyrics. Subtle waves of deep blue and purple light slowly moving across a pitch black canvas. Minimalist, high contrast, cinematic feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB8J2b6q7AZggLeFaqifnXE5wc61Y59_vvplVLX6LMzVS4ldQyL7GD40MpMiDILcMZ26uAkyMzZ35_Pr-7ytbve_Q9mWVLUmOUhN3dTWhR-Wsoevtur4Ml9xoEu9fJfOVPdIsNeDOnytMBkmYChFI-W8FZm-xK7bidt3Fng1gz6m-EDXPgps63PawcRKZ-wTXa8DBBz6XNUWvinFpGwjnu194oEkZTs18La2sFAIyLFK6LycpdFUo07')">
+<div class="absolute inset-0 bg-black/50"></div>
+<div class="text-center w-full relative z-10">
+<div class="text-[#ffffff] font-display-lg text-2xl md:text-3xl font-bold drop-shadow-md leading-tight">My chains are gone</div>
+</div>
+<div class="absolute bottom-2 right-2 bg-tertiary/20 text-tertiary text-[10px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                                    CHORUS START
+                                </div>
+</div>
+<div class="text-label-md font-label-md text-on-surface-variant flex justify-between px-1 group-hover:text-on-surface transition-colors">
+<span>CH - Slide 1</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Transport Controls (Shared Component JSON) -->
+<div class="bg-surface-container-highest dark:bg-surface-container-highest text-error dark:text-error docked full-width bottom-0 border-t border-outline-variant flat no shadows fixed bottom-0 left-64 right-0 h-20 flex justify-center items-center gap-stack-gap px-gutter z-40">
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">PREV</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">NEXT</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">CLEAR</button>
+<button class="bg-error text-on-error font-bold rounded-lg px-6 py-2 text-label-md font-label-md scale-95 transition-all hover:brightness-125">BLACK</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">LOGO</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">EMERGENCY</button>
+</div>
+</div>
+</body></html>

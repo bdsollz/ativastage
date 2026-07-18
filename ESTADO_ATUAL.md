@@ -4,7 +4,8 @@
 > [`docs/METODO_ESTADO.md`](docs/METODO_ESTADO.md).
 
 - **Última atualização:** 2026-07-17 23:16 (-03)
-- **Fase corrente:** Fase 0 — Fundação (em andamento)
+- **Fase corrente:** Fase 0 — Fundação **CONCLUÍDA ✅** (CI verde nas 2 plataformas,
+  run `ec3d0c8`, 2m18s). Próxima: Fase 1 — Prova audiovisual.
 - **Versão:** 0.0.1 (ver arquivo `VERSION`)
 - **Branch sugerida:** `phase/0-foundation`
 
@@ -53,12 +54,25 @@
 
 ## O que falta na Fase 0 (próximos passos concretos)
 
-1. **CI verde** nas duas plataformas (macOS + Windows). 1ª execução (`c005644`)
-   falhou em ~23s no setup do vcpkg (`run-vcpkg` com `master` inválido). CI
-   reescrito: usa vcpkg pré-instalado do runner, `x-update-baseline` p/ baseline,
-   `msvc-dev-cmd` no Windows, sem Qt (não usado nos presets debug da Fase 0).
-   → Falta commitar+push (rodar `scripts/git-sync.command`) e conferir verde.
-2. **Pipeline de empacotamento mínimo** (dmg/zip sem assinatura) — esboço.
+1. ~~CI verde nas duas plataformas~~ **FEITO** (`ec3d0c8`). O CI foi reescrito:
+   vcpkg pré-instalado do runner + `x-update-baseline`, `msvc-dev-cmd` no Windows,
+   sem Qt nos presets debug.
+2. **Pipeline de empacotamento mínimo** (dmg/zip sem assinatura) — esboço (opcional,
+   pode entrar junto da Fase 9).
+
+## Próxima fase — Fase 1 (Prova audiovisual) ⚠ fase de risco
+
+Objetivo: provar o núcleo difícil antes de tudo. Entregas:
+- Alvo GUI `app` (Qt Quick) — cria `src/app/CMakeLists.txt`; a partir daqui o
+  `AtivaStage.command` passa a montar o `.app` sozinho.
+- Janela de saída fullscreen em monitor secundário (mac + win).
+- Vídeo H.264 1080p/4K via FFmpeg → textura RHI, com áudio sincronizado.
+- Pré-carregamento (`Primed`) e GoLive < 100 ms.
+- Audio Engine mínimo (1 deck: play/pause/stop/volume/fade, device selecionável).
+- Hot-plug: desconectar monitor durante reprodução não derruba o app.
+- Soaktest de 1 h nas duas plataformas.
+- **Reintroduzir ffmpeg (+ libsodium quando o remote começar) no `vcpkg.json`** e
+  no CI (agora vale o custo do build).
 
 ## Notas
 
@@ -81,6 +95,27 @@ ctest --test-dir build/local-debug --output-on-failure
 ```
 (O preset `mac-debug`/`win-debug` usa a toolchain do vcpkg via `VCPKG_ROOT`.)
 
+## Referência de UI (telas) — IMPORTANTE
+
+O idealizador enviou o layout visual final (export do Google Stitch, "Studio
+Precision"). **Tudo está no repositório:**
+
+- `docs/design/UI_REFERENCE.md` — guia consolidado: tokens (cores de estado
+  LIVE=vermelho, PREVIEW=âmbar, ACTIVE=azul, PLAYING=verde), tipografia (Inter +
+  JetBrains Mono), shell global (sidebar Music/Bible/Presentation/Audio/Library/
+  Settings + barra de transporte PREV/NEXT/CLEAR/BLACK/LOGO/EMERGENCY), e o
+  layout de cada uma das 5 telas.
+- `docs/design/stitch/` — arquivos brutos: 5 telas com `screen.png` (mockup) e
+  `code.html` (markup Tailwind exato) + `studio_precision/DESIGN.md` (design system).
+
+Telas de referência: Music Central, Bible Central, Audio Central (+ variante
+"layout alinhado"), Saídas/Hardware (Output Routing).
+
+**Quando usar:** a UI começa na **Fase 3** (Música). Fases 1–2 são núcleo/engines,
+não precisam disso ainda. Ao construir QML, traduzir os tokens para um Theme
+singleton (nunca hardcodar hex). A marca "ProChurch AV" nos mockups é placeholder
+→ substituir por **AtivaStage** (nome definitivo, ADR-0003).
+
 ## Invariantes ativas (NÃO violar)
 
 - Ordem das fases é lei; caminho crítico (engine) antes de UI.
@@ -92,11 +127,16 @@ ctest --test-dir build/local-debug --output-on-failure
 - Schema muda só por migração numerada + ADR.
 - Merge na `main` só com CI verde nas duas plataformas.
 
+## Decisões fechadas recentes
+
+- **Nome do produto = AtivaStage** (definitivo, ADR-0003). Bundle id
+  `br.com.ativa.ativastage`. Substituir placeholder "ProChurch AV" na UI.
+
 ## Decisões em aberto relevantes
 
-- Nome definitivo do produto e do serviço mDNS (bundle id provisório:
-  `br.com.ativa.ativastage`).
-- Baseline/pin do vcpkg (item 2 acima).
+- Nome definitivo do serviço mDNS (proposta `_ativastage._tcp.local`, confirmar
+  na Fase 8).
+- Baseline/pin do vcpkg (quando ffmpeg voltar, na Fase 1).
 - Versão(ões) bíblica(s) em domínio público a incluir (Fase 4).
 
 ## Pendências / bloqueios

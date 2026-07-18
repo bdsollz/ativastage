@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProChurch AV - Audio Central</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#adc6ff",
+                    "on-surface": "#e1e2ec",
+                    "secondary-fixed": "#ffddb8",
+                    "surface-tint": "#adc6ff",
+                    "on-error": "#690005",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "surface-bright": "#363941",
+                    "outline": "#8c909f",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "surface": "#10131a",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-container": "#5c0008",
+                    "primary-fixed": "#d8e2ff",
+                    "on-secondary": "#472a00",
+                    "on-tertiary-fixed": "#410004",
+                    "background": "#10131a",
+                    "inverse-surface": "#e1e2ec",
+                    "tertiary-container": "#ff5451",
+                    "error": "#ffb4ab",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "surface-container-high": "#272a31",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-primary-container": "#00285d",
+                    "on-primary-fixed": "#001a42",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#4d8eff",
+                    "on-background": "#e1e2ec",
+                    "on-surface-variant": "#c2c6d6",
+                    "on-tertiary": "#68000a",
+                    "on-primary": "#002e6a",
+                    "secondary": "#ffb95f",
+                    "inverse-on-surface": "#2e3038",
+                    "tertiary-fixed": "#ffdad7",
+                    "on-secondary-fixed": "#2a1700",
+                    "surface-container-highest": "#32353c",
+                    "outline-variant": "#424754",
+                    "surface-variant": "#32353c",
+                    "on-secondary-container": "#5b3800",
+                    "error-container": "#93000a",
+                    "surface-container": "#1d2027",
+                    "inverse-primary": "#005ac2",
+                    "surface-dim": "#10131a",
+                    "surface-container-lowest": "#0b0e15",
+                    "tertiary": "#ffb3ad",
+                    "secondary-container": "#ee9800",
+                    "surface-container-low": "#191b23"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "8px",
+                    "unit": "4px",
+                    "panel-padding": "12px",
+                    "margin-page": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter", "sans-serif"],
+                    "title-md": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "title-lg": ["Inter", "sans-serif"],
+                    "label-sm": ["Inter", "sans-serif"],
+                    "headline-lg": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"],
+                    "display-lg": ["Inter", "sans-serif"],
+                    "mono-md": ["JetBrains Mono", "monospace"],
+                    "body-md": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom styles for sliders and scrollbars to match the dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #424754; /* outline-variant */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #8c909f; /* outline */
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #adc6ff; /* primary */
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 0 4px rgba(173, 198, 255, 0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #424754; /* outline-variant */
+            border-radius: 2px;
+        }
+        
+        .waveform-mask {
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.2) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.2) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-hidden">
+<!-- Top Navigation Bar (Adapted from Shared Component for Context) -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-outline-variant px-6 py-3 bg-surface-container-lowest shrink-0 z-10 relative">
+<div class="flex items-center gap-4 text-on-background">
+<div class="size-6 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-on-background text-lg font-bold leading-tight tracking-[-0.015em] font-title-lg">ProChurch AV</h2>
+</div>
+<div class="flex flex-1 justify-end gap-8">
+<nav class="flex items-center gap-9">
+<a class="text-on-surface-variant hover:text-on-background text-sm font-medium leading-normal transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-medium leading-normal border-b-2 border-primary pb-1" href="#">Audio Central</a>
+<a class="text-on-surface-variant hover:text-on-background text-sm font-medium leading-normal transition-colors" href="#">Video</a>
+<a class="text-on-surface-variant hover:text-on-background text-sm font-medium leading-normal transition-colors" href="#">Settings</a>
+</nav>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-error hover:bg-error-container text-on-error hover:text-on-error-container text-sm font-bold leading-normal transition-colors shadow-sm">
+<span class="material-symbols-outlined mr-2 text-[18px]">volume_off</span>
+<span class="truncate">Emergency Mute</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Audio Library Sidebar -->
+<aside class="w-[280px] bg-surface-container-low flex flex-col border-r border-outline-variant shrink-0">
+<div class="p-4 flex flex-col gap-6">
+<!-- User/Library Header -->
+<div class="flex gap-3 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border border-outline-variant" data-alt="A modern abstract minimalist logo icon indicating a media library, utilizing clean geometry in deep blue and bright white colors, lit evenly." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCTZ4_8o6CeVji9nm3aJq8Ii1IBVkfFIAFzA_9h6zqeJ2M24SLoODUQ6iMa_Bh5G50hL59nLf2ZpVfOdNVi0vAgcHGiQ8UtQuNdr6K2cLj4qgBrR6wzmf-inHKeTDvI4voNEhZs5xBjx9PQJHP6QEqdrllc65IuUxBq4lcmmEHJyIZIt5_2_akEjgSLQttQcn0ZQA6rGtJ0j4u68kfkNMJfRDY-r8lkrhvNptbk_WiITXwAiRr3HF1S')"></div>
+<div class="flex flex-col">
+<h1 class="text-on-background text-title-md font-semibold leading-normal">Audio Library</h1>
+<p class="text-on-surface-variant text-label-md font-normal leading-normal">Local &amp; Cloud Connect</p>
+</div>
+</div>
+<!-- Search -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-[20px]">search</span>
+<input class="w-full bg-surface border border-outline-variant rounded-lg pl-10 pr-4 py-2 text-sm text-on-background focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-outline" placeholder="Search tracks..." type="text"/>
+</div>
+<!-- Categories -->
+<div class="flex flex-col gap-1">
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-surface-container-high text-primary group transition-colors">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">music_note</span>
+<span class="text-sm font-medium leading-normal">Music</span>
+<span class="ml-auto text-xs bg-surface px-2 py-0.5 rounded-full text-on-surface-variant border border-outline-variant">142</span>
+</button>
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-background group transition-colors">
+<span class="material-symbols-outlined text-[20px]">graphic_eq</span>
+<span class="text-sm font-medium leading-normal">Background</span>
+<span class="ml-auto text-xs bg-surface-container px-2 py-0.5 rounded-full border border-outline-variant">85</span>
+</button>
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-background group transition-colors">
+<span class="material-symbols-outlined text-[20px]">auto_awesome</span>
+<span class="text-sm font-medium leading-normal">SFX</span>
+<span class="ml-auto text-xs bg-surface-container px-2 py-0.5 rounded-full border border-outline-variant">312</span>
+</button>
+<button class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-background group transition-colors mt-4">
+<span class="material-symbols-outlined text-[20px]">folder</span>
+<span class="text-sm font-medium leading-normal">Browse Folders</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Workspace -->
+<main class="flex-1 flex flex-col bg-background p-6 gap-6 overflow-y-auto min-w-[800px]">
+<!-- Decks Row -->
+<div class="flex gap-6 min-h-[420px] shrink-0">
+<!-- Main Deck -->
+<section class="flex-[3] bg-surface-container rounded-xl p-6 flex flex-col border border-outline-variant relative overflow-hidden shadow-sm">
+<!-- Top Bar: Deck Info & Output -->
+<div class="flex justify-between items-start mb-6">
+<div>
+<h2 class="text-headline-md text-on-background mb-1">Main Deck</h2>
+<div class="flex items-center gap-2 text-on-surface-variant text-label-md">
+<span class="material-symbols-outlined text-[16px]">cable</span>
+<span>Output:</span>
+<select class="bg-surface border border-outline-variant rounded px-2 py-1 text-xs text-on-background outline-none focus:border-primary">
+<option>FOH L/R (Dante 1-2)</option>
+<option>Broadcast Mix (Dante 3-4)</option>
+<option>Local Audio</option>
+</select>
+</div>
+</div>
+<!-- Status Badge -->
+<div class="bg-[#1b4332] text-[#74c69d] px-4 py-1.5 rounded-full border border-[#2d6a4f] flex items-center gap-2 shadow-[0_0_15px_rgba(45,106,79,0.3)] animate-pulse">
+<div class="size-2 rounded-full bg-[#95d5b2]"></div>
+<span class="font-bold tracking-widest text-sm">PLAYING</span>
+</div>
+</div>
+<!-- Track Info -->
+<div class="flex flex-col items-center justify-center mb-6 z-10">
+<h3 class="text-display-lg text-on-background font-bold truncate max-w-full mb-2 drop-shadow-md">Amazing Grace (Live)</h3>
+<p class="text-title-lg text-primary font-medium truncate max-w-full">Worship Band Vol. 4</p>
+</div>
+<!-- Waveform Visualizer Area -->
+<div class="flex-1 w-full bg-surface-container-lowest rounded-lg border border-outline-variant relative overflow-hidden mb-6 flex items-center justify-center group">
+<!-- Playhead -->
+<div class="absolute left-1/3 top-0 bottom-0 w-0.5 bg-primary z-20 shadow-[0_0_8px_rgba(173,198,255,0.8)]"></div>
+<div class="absolute left-1/3 top-0 -translate-x-1/2 w-3 h-3 rotate-45 bg-primary z-20"></div>
+<!-- Simulated Waveform Image -->
+<div class="w-full h-full absolute inset-0 opacity-80 waveform-mask">
+<img class="w-full h-full object-cover object-center" data-alt="A highly detailed horizontal audio waveform graphic, featuring vibrant glowing blue and bright cyan vertical bars of varying heights against a deep black background, resembling a professional digital audio workstation interface, sharp and technological." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB7heieOQprBpkJ_pwu19oE0osg8K6ZAdWIG_aZZQeaZ6wOUewbNP64K2kJvLvEl6_LW_GBvWWvkh_B2-4RTQjWBLHaKN-vQOc9a43S87mfWBcXHzlqBApUqOX79gO14xhb6xuslYon1wxNZQoIslcjxXtAfyWjy_I35wl2kl3adaIxctY9KOe12iZrQwEN52sSZYrQl_10aLVT3tiqhfHf0S0GT7Gq8OisAi9Duz_8BdTObmemKC2b"/>
+</div>
+<!-- Time Overlay -->
+<div class="absolute bottom-2 left-4 z-20 bg-background/80 px-2 py-1 rounded text-primary text-mono-md font-bold backdrop-blur-sm border border-outline-variant">
+                            01:17.4
+                        </div>
+<div class="absolute bottom-2 right-4 z-20 bg-background/80 px-2 py-1 rounded text-on-surface-variant text-mono-md font-bold backdrop-blur-sm border border-outline-variant">
+                            -03:05.6
+                        </div>
+</div>
+<!-- Controls & Volume -->
+<div class="flex items-center justify-between gap-6">
+<!-- Main Transport -->
+<div class="flex gap-4 items-center">
+<button class="size-14 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-[32px]">stop</span>
+</button>
+<button class="size-14 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary hover:border-primary transition-all">
+<span class="material-symbols-outlined text-[32px]">pause</span>
+</button>
+<button class="size-20 rounded-full bg-primary flex items-center justify-center text-on-primary hover:bg-primary-container hover:scale-105 transition-all shadow-lg shadow-primary/20">
+<span class="material-symbols-outlined text-[48px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="h-14 px-6 rounded-full bg-surface-container-high border border-outline-variant flex items-center justify-center text-on-background hover:bg-surface-container-highest transition-all font-semibold ml-2">
+                                Fade Out
+                            </button>
+</div>
+<!-- Volume -->
+<div class="flex-1 max-w-[300px] flex items-center gap-4 bg-surface-container-low px-4 py-3 rounded-lg border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant">volume_down</span>
+<input class="w-full" max="100" min="0" type="range" value="85"/>
+<span class="material-symbols-outlined text-on-surface-variant">volume_up</span>
+</div>
+</div>
+</section>
+<!-- Pre-listen Deck -->
+<section class="flex-[1.5] min-w-[350px] bg-surface-container rounded-xl p-5 flex flex-col border border-outline-variant">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h2 class="text-title-lg text-on-background mb-1">Pre-listen</h2>
+<div class="flex items-center gap-2 text-on-surface-variant text-[11px] uppercase tracking-wider font-bold">
+<span>Out: HP Mix</span>
+</div>
+</div>
+<div class="bg-surface px-2 py-1 rounded text-xs font-mono text-outline border border-outline-variant">
+                            READY
+                        </div>
+</div>
+<div class="flex flex-col mb-4">
+<h3 class="text-title-md text-on-background truncate">Oceans (Where Feet May Fail)</h3>
+<p class="text-label-md text-on-surface-variant truncate">Hillsong United</p>
+</div>
+<!-- Mini Waveform -->
+<div class="h-24 w-full bg-surface-container-lowest rounded overflow-hidden relative mb-4 border border-outline-variant">
+<img class="w-full h-full object-cover opacity-60 grayscale hover:grayscale-0 transition-all" data-alt="A small, compact digital audio waveform in subtle orange and grey tones against a dark slate background, simple and precise, indicating audio readiness in a DJ software interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWzMp3sSJPKyp3qKr8bBg1AXJRSF6sH453gkD2Fzj42LqdWTbudoTcIOCC9MaONbXnsJqY9Miraq9uxK7CDCq2s05tD48RqQAhH0f9vbL87Cp6ECYV048Jx8y7Rm_x6W3YaJPssvG4LQjxH9IXuRNxHFbT-fTeE8KGsTK99vZT-4wLcO8-9z2p5BVG0rTXCoG3Vi-5C0WYfN_1PpWyrlZu7ZaojS58ZErz3M3LmjSJoOGhfWqArK_t"/>
+<div class="absolute left-0 bottom-0 top-0 w-1/4 bg-primary/20 border-r border-primary"></div>
+<div class="absolute bottom-1 right-2 text-xs font-mono text-on-surface-variant bg-background/80 px-1 rounded">08:55</div>
+</div>
+<!-- Mini Controls -->
+<div class="flex justify-between items-center mt-auto">
+<div class="flex gap-2">
+<button class="size-10 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-surface-variant hover:text-primary transition-all">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="h-10 px-4 rounded-full bg-surface border border-outline-variant flex items-center justify-center text-on-background font-medium hover:bg-surface-container-highest transition-all text-sm">
+                                CUE
+                            </button>
+</div>
+<div class="flex items-center gap-2 w-32">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">volume_mute</span>
+<input class="w-full" max="100" min="0" type="range" value="50"/>
+</div>
+</div>
+</section>
+</div>
+<!-- Playlist Section -->
+<section class="flex-1 bg-surface-container rounded-xl flex flex-col border border-outline-variant overflow-hidden min-h-[300px]">
+<!-- Playlist Header & Controls -->
+<div class="bg-surface-container-high border-b border-outline-variant px-5 py-3 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<h3 class="text-title-lg font-bold text-on-background">Queue</h3>
+<span class="bg-primary/20 text-primary px-2 py-0.5 rounded text-xs font-bold">4 Tracks</span>
+</div>
+<div class="flex items-center gap-2 bg-surface p-1 rounded-lg border border-outline-variant">
+<button class="p-1.5 rounded-md hover:bg-surface-container text-primary bg-primary/10 transition-colors" title="Auto-play Next">
+<span class="material-symbols-outlined text-[20px]">playlist_play</span>
+</button>
+<div class="w-px h-5 bg-outline-variant"></div>
+<button class="p-1.5 rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-background transition-colors" title="Repeat All">
+<span class="material-symbols-outlined text-[20px]">repeat</span>
+</button>
+<button class="p-1.5 rounded-md hover:bg-surface-container text-on-surface-variant hover:text-on-background transition-colors" title="Shuffle">
+<span class="material-symbols-outlined text-[20px]">shuffle</span>
+</button>
+</div>
+</div>
+<!-- Playlist Table Header -->
+<div class="grid grid-cols-[40px_1fr_200px_100px_80px] gap-4 px-5 py-2 border-b border-outline-variant text-xs font-bold text-outline uppercase tracking-wider bg-surface-container-low">
+<div></div>
+<div>Title</div>
+<div>Artist</div>
+<div>Duration</div>
+<div class="text-right">Actions</div>
+</div>
+<!-- Playlist Items -->
+<div class="flex flex-col overflow-y-auto">
+<!-- Item 1 (Playing) -->
+<div class="grid grid-cols-[40px_1fr_200px_100px_80px] gap-4 px-5 py-3 items-center border-b border-outline-variant bg-primary/5 hover:bg-primary/10 transition-colors group cursor-pointer">
+<div class="text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">volume_up</span>
+</div>
+<div class="font-medium text-primary truncate">Amazing Grace (Live)</div>
+<div class="text-on-surface-variant text-sm truncate">Worship Band Vol. 4</div>
+<div class="text-on-surface-variant font-mono text-sm">04:23</div>
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="grid grid-cols-[40px_1fr_200px_100px_80px] gap-4 px-5 py-3 items-center border-b border-outline-variant hover:bg-surface-container-high transition-colors group cursor-grab active:cursor-grabbing">
+<div class="text-outline-variant flex items-center justify-center group-hover:text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</div>
+<div class="font-medium text-on-background truncate">Build My Life</div>
+<div class="text-on-surface-variant text-sm truncate">Housefires</div>
+<div class="text-on-surface-variant font-mono text-sm">08:12</div>
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_arrow</span></button>
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="grid grid-cols-[40px_1fr_200px_100px_80px] gap-4 px-5 py-3 items-center border-b border-outline-variant hover:bg-surface-container-high transition-colors group cursor-grab active:cursor-grabbing">
+<div class="text-outline-variant flex items-center justify-center group-hover:text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">drag_indicator</span>
+</div>
+<div class="font-medium text-on-background truncate">What A Beautiful Name</div>
+<div class="text-on-surface-variant text-sm truncate">Hillsong Worship</div>
+<div class="text-on-surface-variant font-mono text-sm">05:40</div>
+<div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]">play_arrow</span></button>
+<button class="text-on-surface-variant hover:text-error"><span class="material-symbols-outlined text-[18px]">close</span></button>
+</div>
+</div>
+<!-- Drop Zone Placeholder -->
+<div class="px-5 py-8 flex flex-col items-center justify-center text-outline-variant border-2 border-dashed border-outline-variant/30 mx-4 my-4 rounded-lg bg-surface-container-lowest">
+<span class="material-symbols-outlined text-[32px] mb-2">post_add</span>
+<p class="text-sm font-medium">Drag and drop tracks here to add to queue</p>
+</div>
+</div>
+</section>
+</main>
+</div>
+</body></html>

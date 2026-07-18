@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProChurch AV - Bible</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&amp;family=JetBrains+Mono:wght@400&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface": "#10131a",
+                        "primary-container": "#4d8eff",
+                        "on-secondary": "#472a00",
+                        "inverse-on-surface": "#2e3038",
+                        "tertiary-fixed": "#ffdad7",
+                        "surface-tint": "#adc6ff",
+                        "surface-bright": "#363941",
+                        "on-secondary-container": "#5b3800",
+                        "inverse-primary": "#005ac2",
+                        "on-error-container": "#ffdad6",
+                        "outline": "#8c909f",
+                        "background": "#10131a",
+                        "surface-dim": "#10131a",
+                        "secondary": "#ffb95f",
+                        "on-background": "#e1e2ec",
+                        "on-secondary-fixed-variant": "#653e00",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#68000a",
+                        "on-tertiary-fixed": "#410004",
+                        "on-primary-fixed-variant": "#004395",
+                        "on-surface": "#e1e2ec",
+                        "secondary-fixed": "#ffddb8",
+                        "on-tertiary-fixed-variant": "#930013",
+                        "surface-container": "#1d2027",
+                        "on-primary-fixed": "#001a42",
+                        "on-secondary-fixed": "#2a1700",
+                        "error-container": "#93000a",
+                        "tertiary-container": "#ff5451",
+                        "tertiary": "#ffb3ad",
+                        "primary-fixed-dim": "#adc6ff",
+                        "on-tertiary-container": "#5c0008",
+                        "surface-container-low": "#191b23",
+                        "primary": "#adc6ff",
+                        "on-primary-container": "#00285d",
+                        "surface-container-highest": "#32353c",
+                        "surface-container-high": "#272a31",
+                        "on-primary": "#002e6a",
+                        "surface-container-lowest": "#0b0e15",
+                        "primary-fixed": "#d8e2ff",
+                        "outline-variant": "#424754",
+                        "secondary-fixed-dim": "#ffb95f",
+                        "surface-variant": "#32353c",
+                        "secondary-container": "#ee9800",
+                        "inverse-surface": "#e1e2ec",
+                        "on-error": "#690005",
+                        "tertiary-fixed-dim": "#ffb3ad",
+                        "on-surface-variant": "#c2c6d6"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "panel-padding": "12px",
+                        "unit": "4px",
+                        "stack-gap": "8px",
+                        "margin-page": "24px",
+                        "gutter": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "title-md": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "mono-md": ["JetBrains Mono"],
+                        "body-lg": ["Inter"],
+                        "title-lg": ["Inter"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "700" }],
+                        "title-md": ["16px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "mono-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { background-color: #0A0A0A; color: #e1e2ec; overflow: hidden; }
+        .panel { background-color: #171717; border: 1px solid #262626; }
+        .panel-header { border-bottom: 1px solid #262626; }
+        .list-row { border-bottom: 1px solid #262626; }
+        .list-row:hover { background-color: #262626; }
+        .list-row.active { border-left: 4px solid #3B82F6; background-color: #262626; }
+        .grid-item { border: 1px solid #262626; }
+        .grid-item:hover { background-color: #262626; border-color: #404040; }
+        .grid-item.active { background-color: rgba(59, 130, 246, 0.1); border-color: #3B82F6; }
+        
+        /* Custom Scrollbar for dark theme */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #10131a; }
+        ::-webkit-scrollbar-thumb { background: #424754; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #8c909f; }
+    </style>
+</head>
+<body class="flex h-screen text-body-md font-body-md bg-background text-on-background">
+<!-- SideNavBar -->
+<nav class="docked full-height left-0 w-64 border-r border-outline-variant bg-surface-container-low dark:bg-surface-container-low flex flex-col h-full py-panel-padding z-20 flex-shrink-0">
+<div class="px-4 pb-6 border-b border-outline-variant mb-4">
+<h1 class="text-headline-md font-headline-md font-bold text-primary">ProChurch AV</h1>
+<div class="mt-4 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center overflow-hidden border border-outline-variant">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="account_circle">account_circle</span>
+</div>
+<div>
+<div class="text-title-md font-title-md text-primary">Main Sanctuary</div>
+<div class="text-label-sm font-label-sm text-error flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span> On Air
+                    </div>
+</div>
+</div>
+<button class="w-full mt-6 bg-error text-on-error font-title-md font-bold py-2 rounded-lg hover:brightness-125 transition-all">GO LIVE</button>
+</div>
+<div class="flex-1 overflow-y-auto px-2 space-y-1">
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="music_note">music_note</span>
+<span class="text-label-md font-label-md">Music</span>
+</a>
+<a class="text-primary bg-primary-container/10 border-l-4 border-primary flex items-center px-4 py-3 rounded-r-lg scale-[0.98] transition-transform duration-100" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="book" style="font-variation-settings: 'FILL' 1;">book</span>
+<span class="text-label-md font-label-md">Bible</span>
+</a>
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="present_to_all">present_to_all</span>
+<span class="text-label-md font-label-md">Presentation</span>
+</a>
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="graphic_eq">graphic_eq</span>
+<span class="text-label-md font-label-md">Audio</span>
+</a>
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="library_books">library_books</span>
+<span class="text-label-md font-label-md">Library</span>
+</a>
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto px-2 pt-4 border-t border-outline-variant space-y-1">
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="help">help</span>
+<span class="text-label-md font-label-md">Help</span>
+</a>
+<a class="text-on-surface-variant flex items-center px-4 py-3 rounded-lg hover:bg-surface-container-high dark:hover:bg-surface-container-high transition-colors" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="sensors">sensors</span>
+<span class="text-label-md font-label-md">Status</span>
+</a>
+</div>
+</nav>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col h-full relative overflow-hidden pb-20"> <!-- pb-20 for bottom transport controls -->
+<!-- Top Search Bar & Version Selection (TopAppBar Contextual Equivalent) -->
+<header class="h-16 flex items-center justify-between px-gutter border-b border-outline-variant bg-surface shrink-0">
+<div class="flex-1 max-w-3xl flex items-center gap-4">
+<div class="relative w-full max-w-xl">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" data-icon="search">search</span>
+<input class="w-full bg-[#0A0A0A] border border-[#262626] text-on-surface rounded-lg pl-10 pr-4 py-2 focus:border-[#3B82F6] focus:ring-1 focus:ring-[#3B82F6] outline-none text-body-md font-body-md" placeholder="Search reference (e.g. John 3:16) or keywords..." type="text"/>
+</div>
+<div class="relative">
+<select class="appearance-none bg-[#0A0A0A] border border-[#262626] text-on-surface rounded-lg pl-4 pr-10 py-2 focus:border-[#3B82F6] outline-none text-label-md font-label-md cursor-pointer">
+<option value="niv">NIV (New International Version)</option>
+<option value="kjv">KJV (King James Version)</option>
+<option value="esv">ESV (English Standard Version)</option>
+<option value="nlt">NLT (New Living Translation)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none" data-icon="arrow_drop_down">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-lg hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="font_download">font_download</span>
+</button>
+<button class="w-10 h-10 rounded-lg hover:bg-surface-container-highest flex items-center justify-center text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined" data-icon="display_settings">display_settings</span>
+</button>
+</div>
+</header>
+<!-- Main Workspace Grid -->
+<div class="flex-1 flex overflow-hidden p-gutter gap-gutter bg-[#0A0A0A]">
+<!-- Left Column: Books & Chapters -->
+<div class="w-72 flex flex-col gap-gutter shrink-0">
+<div class="panel flex-1 flex flex-col rounded-lg overflow-hidden">
+<div class="panel-header p-3 bg-surface-container-low flex justify-between items-center shrink-0">
+<h2 class="text-title-md font-title-md text-on-surface">Books</h2>
+<div class="flex gap-1">
+<button class="px-2 py-1 bg-[#262626] rounded text-label-sm font-label-sm text-primary">OT</button>
+<button class="px-2 py-1 bg-[#0A0A0A] rounded border border-[#262626] text-label-sm font-label-sm text-on-surface-variant">NT</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto p-2 grid grid-cols-2 gap-1 content-start">
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Genesis</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Exodus</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Leviticus</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Numbers</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Deuteronomy</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Joshua</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Judges</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Ruth</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">1 Samuel</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">2 Samuel</button>
+<button class="grid-item active text-label-md font-label-md p-2 rounded text-left text-primary truncate">Psalms</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-left text-on-surface truncate">Proverbs</button>
+</div>
+</div>
+<div class="panel h-1/3 flex flex-col rounded-lg overflow-hidden shrink-0">
+<div class="panel-header p-3 bg-surface-container-low shrink-0">
+<h2 class="text-title-md font-title-md text-on-surface">Chapter</h2>
+</div>
+<div class="flex-1 overflow-y-auto p-2 grid grid-cols-5 gap-1 content-start">
+<button class="grid-item text-label-md font-label-md p-2 rounded text-center text-on-surface">22</button>
+<button class="grid-item active text-label-md font-label-md p-2 rounded text-center text-primary">23</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-center text-on-surface">24</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-center text-on-surface">25</button>
+<button class="grid-item text-label-md font-label-md p-2 rounded text-center text-on-surface">26</button>
+</div>
+</div>
+</div>
+<!-- Middle Column: Verses Grid -->
+<div class="flex-1 flex flex-col panel rounded-lg overflow-hidden min-w-[300px]">
+<div class="panel-header p-3 bg-surface-container-low flex justify-between items-center shrink-0">
+<h2 class="text-title-md font-title-md text-on-surface">Psalms 23</h2>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-surface-container-highest border border-outline-variant rounded text-label-md font-label-md flex items-center gap-1 hover:bg-surface-variant">
+<span class="material-symbols-outlined text-[16px]" data-icon="select_all">select_all</span> Select All
+                        </button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto">
+<div class="list-row active flex p-3 gap-4 cursor-pointer">
+<div class="text-label-md font-label-md text-on-surface-variant w-6 text-right shrink-0 mt-1">1</div>
+<div class="text-body-lg font-body-lg text-on-surface">The LORD is my shepherd; I shall not want.</div>
+</div>
+<div class="list-row flex p-3 gap-4 cursor-pointer">
+<div class="text-label-md font-label-md text-on-surface-variant w-6 text-right shrink-0 mt-1">2</div>
+<div class="text-body-lg font-body-lg text-on-surface">He maketh me to lie down in green pastures: he leadeth me beside the still waters.</div>
+</div>
+<div class="list-row flex p-3 gap-4 cursor-pointer">
+<div class="text-label-md font-label-md text-on-surface-variant w-6 text-right shrink-0 mt-1">3</div>
+<div class="text-body-lg font-body-lg text-on-surface">He restoreth my soul: he leadeth me in the paths of righteousness for his name's sake.</div>
+</div>
+<div class="list-row flex p-3 gap-4 cursor-pointer">
+<div class="text-label-md font-label-md text-on-surface-variant w-6 text-right shrink-0 mt-1">4</div>
+<div class="text-body-lg font-body-lg text-on-surface">Yea, though I walk through the valley of the shadow of death, I will fear no evil: for thou art with me; thy rod and thy staff they comfort me.</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Review & History -->
+<div class="w-80 flex flex-col gap-gutter shrink-0">
+<!-- Slide Preview -->
+<div class="panel flex-1 flex flex-col rounded-lg overflow-hidden max-h-[50%]">
+<div class="panel-header p-3 bg-surface-container-low flex justify-between items-center shrink-0">
+<h2 class="text-title-md font-title-md text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="preview">preview</span> Preview
+                        </h2>
+<span class="px-2 py-0.5 bg-[#404040] rounded-full text-label-sm font-label-sm text-on-surface">16:9</span>
+</div>
+<div class="flex-1 p-4 bg-[#0A0A0A] flex flex-col justify-center items-center relative">
+<!-- Simulated Screen -->
+<div class="w-full aspect-video border border-[#404040] rounded shadow-lg relative overflow-hidden flex flex-col justify-center p-6 bg-gradient-to-br from-[#1a1a1a] to-[#0A0A0A]">
+<div class="text-center">
+<p class="font-display-lg text-[24px] leading-tight text-white font-bold mb-4 line-clamp-4 text-shadow">
+                                    The LORD is my shepherd; I shall not want.
+                                </p>
+<p class="text-primary font-mono-md text-[14px] mt-auto">Psalms 23:1 NIV</p>
+</div>
+</div>
+</div>
+<div class="p-3 bg-surface-container-low border-t border-[#262626] flex gap-2 shrink-0">
+<button class="flex-1 bg-primary text-on-primary-container font-title-md py-2 rounded font-bold hover:brightness-110 flex justify-center items-center gap-2">
+<span class="material-symbols-outlined text-[20px]" data-icon="send_to_mobile">send_to_mobile</span> SEND LIVE
+                        </button>
+</div>
+</div>
+<!-- History / Favorites -->
+<div class="panel flex-1 flex flex-col rounded-lg overflow-hidden">
+<div class="panel-header p-0 bg-surface-container-low flex shrink-0 border-b border-[#262626]">
+<button class="flex-1 py-3 text-label-md font-label-md text-primary border-b-2 border-primary">History</button>
+<button class="flex-1 py-3 text-label-md font-label-md text-on-surface-variant hover:text-on-surface">Favorites</button>
+</div>
+<div class="flex-1 overflow-y-auto">
+<div class="p-3 border-b border-[#262626] hover:bg-[#262626] cursor-pointer flex justify-between items-center">
+<div>
+<div class="text-title-md font-title-md text-on-surface">John 3:16</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">10 mins ago</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]" data-icon="star_border">star_border</span></button>
+</div>
+<div class="p-3 border-b border-[#262626] hover:bg-[#262626] cursor-pointer flex justify-between items-center">
+<div>
+<div class="text-title-md font-title-md text-on-surface">Romans 8:28</div>
+<div class="text-label-sm font-label-sm text-on-surface-variant">32 mins ago</div>
+</div>
+<button class="text-on-surface-variant hover:text-primary"><span class="material-symbols-outlined text-[18px]" data-icon="star_border">star_border</span></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Transport Controls (Shared Component) -->
+<div class="fixed bottom-0 left-64 right-0 h-20 flex justify-center items-center gap-stack-gap px-gutter z-40 bg-surface-container-highest border-t border-outline-variant">
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">PREV</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">NEXT</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">CLEAR</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">BLACK</button>
+<button class="bg-surface-container text-on-surface-variant border border-outline-variant rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">LOGO</button>
+<button class="bg-error text-on-error font-bold rounded-lg px-6 py-2 text-label-md font-label-md hover:brightness-125 transition-all">EMERGENCY</button>
+</div>
+</body></html>

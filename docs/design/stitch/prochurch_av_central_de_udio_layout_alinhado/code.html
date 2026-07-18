@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ProChurch AV - Audio Central</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary": "#3b82f6",
+                    "on-surface": "#e1e2ec",
+                    "secondary-fixed": "#ffddb8",
+                    "surface-tint": "#3b82f6",
+                    "on-error": "#ffffff",
+                    "on-tertiary-fixed-variant": "#930013",
+                    "surface-bright": "#363941",
+                    "outline": "#4b5563",
+                    "tertiary-fixed-dim": "#ffb3ad",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "surface": "#0f1115",
+                    "on-error-container": "#ffdad6",
+                    "on-tertiary-container": "#5c0008",
+                    "primary-fixed": "#d8e2ff",
+                    "on-secondary": "#472a00",
+                    "on-tertiary-fixed": "#410004",
+                    "background": "#0a0a0a",
+                    "inverse-surface": "#e1e2ec",
+                    "tertiary-container": "#ff5451",
+                    "error": "#ef4444",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "surface-container-high": "#1f2937",
+                    "on-primary-fixed-variant": "#004395",
+                    "on-primary-container": "#ffffff",
+                    "on-primary-fixed": "#001a42",
+                    "primary-fixed-dim": "#adc6ff",
+                    "primary-container": "#2563eb",
+                    "on-background": "#f3f4f6",
+                    "on-surface-variant": "#9ca3af",
+                    "on-tertiary": "#68000a",
+                    "on-primary": "#ffffff",
+                    "secondary": "#10b981",
+                    "inverse-on-surface": "#2e3038",
+                    "tertiary-fixed": "#ffdad7",
+                    "on-secondary-fixed": "#2a1700",
+                    "surface-container-highest": "#374151",
+                    "outline-variant": "#374151",
+                    "surface-variant": "#1f2937",
+                    "on-secondary-container": "#5b3800",
+                    "error-container": "#991b1b",
+                    "surface-container": "#111827",
+                    "inverse-primary": "#005ac2",
+                    "surface-dim": "#10131a",
+                    "surface-container-lowest": "#030712",
+                    "tertiary": "#f59e0b",
+                    "secondary-container": "#059669",
+                    "surface-container-low": "#111827"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "8px",
+                    "unit": "4px",
+                    "panel-padding": "12px",
+                    "margin-page": "24px",
+                    "gutter": "16px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter", "sans-serif"],
+                    "title-md": ["Inter", "sans-serif"],
+                    "headline-md": ["Inter", "sans-serif"],
+                    "title-lg": ["Inter", "sans-serif"],
+                    "label-sm": ["Inter", "sans-serif"],
+                    "headline-lg": ["Inter", "sans-serif"],
+                    "body-lg": ["Inter", "sans-serif"],
+                    "display-lg": ["Inter", "sans-serif"],
+                    "mono-md": ["JetBrains Mono", "monospace"],
+                    "body-md": ["Inter", "sans-serif"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        /* Custom styles for sliders and scrollbars to match the dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #030712;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151; /* outline-variant */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4b5563; /* outline */
+        }
+        
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 16px;
+            width: 16px;
+            border-radius: 50%;
+            background: #3b82f6; /* primary */
+            cursor: pointer;
+            margin-top: -6px;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #374151; /* outline-variant */
+            border-radius: 2px;
+        }
+        
+        .meter-bar {
+            width: 100%;
+            height: 4px;
+            background: #1f2937;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 2px;
+        }
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #10b981 60%, #f59e0b 80%, #ef4444 95%, #ef4444 100%);
+            width: 75%;
+            transition: width 0.1s ease;
+        }
+        
+        .vu-meter {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            height: 100%;
+            justify-content: flex-end;
+        }
+        .vu-led {
+            width: 100%;
+            height: 6px;
+            border-radius: 1px;
+            background: #1f2937;
+        }
+        .vu-led.active-green { background: #10b981; box-shadow: 0 0 4px #10b981; }
+        .vu-led.active-yellow { background: #f59e0b; box-shadow: 0 0 4px #f59e0b; }
+        .vu-led.active-red { background: #ef4444; box-shadow: 0 0 4px #ef4444; }
+        
+        @keyframes pulse-playing {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.02); box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .playing-active {
+            animation: pulse-playing 2s infinite;
+            border: 2px solid #3b82f6 !important;
+            background: rgba(59, 130, 246, 0.1) !important;
+        }
+        
+        .waveform-mask {
+            mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.2) 100%);
+            -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 50%, rgba(0,0,0,0.2) 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-hidden select-none pl-16"><nav class="fixed left-0 top-0 bottom-0 w-16 bg-surface-container-lowest border-r border-outline-variant flex flex-col items-center py-4 gap-4 z-50">
+<div class="size-10 bg-primary/10 rounded-lg flex items-center justify-center text-primary mb-4">
+<span class="material-symbols-outlined text-[24px]">graphic_eq</span>
+</div>
+<button class="size-10 flex items-center justify-center text-outline hover:text-on-background hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined">music_note</span>
+</button>
+<button class="size-10 flex items-center justify-center text-outline hover:text-on-background hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined">menu_book</span>
+</button>
+<button class="size-10 flex items-center justify-center text-outline hover:text-on-background hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined">present_to_all</span>
+</button>
+<button class="size-10 flex items-center justify-center text-primary bg-primary/10 rounded-lg transition-colors">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">volume_up</span>
+</button>
+<button class="size-10 flex items-center justify-center text-outline hover:text-on-background hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined">library_music</span>
+</button>
+<div class="mt-auto">
+<button class="size-10 flex items-center justify-center text-outline hover:text-on-background hover:bg-surface-container rounded-lg transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</nav>
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-outline-variant px-6 py-2 bg-surface-container-lowest shrink-0 z-10 relative">
+<div class="flex items-center gap-4 text-on-background">
+<div class="size-6 text-primary">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.1739 20.1739L27.8261 5.82609C29.1366 7.13663 28.3989 10.1876 26.2002 13.7654C24.8538 15.9564 22.9595 18.3449 20.6522 20.6522C18.3449 22.9595 15.9564 24.8538 13.7654 26.2002C10.1876 28.3989 7.13663 29.1366 5.82609 27.8261L20.1739 42.1739C21.4845 43.4845 24.5355 42.7467 28.1133 40.548C30.3042 39.2016 32.6927 37.3073 35 35C37.3073 32.6927 39.2016 30.3042 40.548 28.1133C42.7467 24.5355 43.4845 21.4845 42.1739 20.1739Z" fill="currentColor"></path>
+<path clip-rule="evenodd" d="M7.24189 26.4066C7.31369 26.4411 7.64204 26.5637 8.52504 26.3738C9.59462 26.1438 11.0343 25.5311 12.7183 24.4963C14.7583 23.2426 17.0256 21.4503 19.238 19.238C21.4503 17.0256 23.2426 14.7583 24.4963 12.7183C25.5311 11.0343 26.1438 9.59463 26.3738 8.52504C26.5637 7.64204 26.4411 7.31369 26.4066 7.24189C26.345 7.21246 26.143 7.14535 25.6664 7.1918C24.9745 7.25925 23.9954 7.5498 22.7699 8.14278C20.3369 9.32007 17.3369 11.4915 14.4142 14.4142C11.4915 17.3369 9.32007 20.3369 8.14278 22.7699C7.5498 23.9954 7.25925 24.9745 7.1918 25.6664C7.14534 26.143 7.21246 26.345 7.24189 26.4066ZM29.9001 10.7285C29.4519 12.0322 28.7617 13.4172 27.9042 14.8126C26.465 17.1544 24.4686 19.6641 22.0664 22.0664C19.6641 24.4686 17.1544 26.465 14.8126 27.9042C13.4172 28.7617 12.0322 29.4519 10.7285 29.9001L21.5754 40.747C21.6001 40.7606 21.8995 40.931 22.8729 40.7217C23.9424 40.4916 25.3821 39.879 27.0661 38.8441C29.1062 37.5904 31.3734 35.7982 33.5858 33.5858C35.7982 31.3734 37.5904 29.1062 38.8441 27.0661C39.879 25.3821 40.4916 23.9425 40.7216 22.8729C40.931 21.8995 40.7606 21.6001 40.747 21.5754L29.9001 10.7285ZM29.2403 4.41187L43.5881 18.7597C44.9757 20.1473 44.9743 22.1235 44.6322 23.7139C44.2714 25.3919 43.4158 27.2666 42.252 29.1604C40.8128 31.5022 38.8165 34.012 36.4142 36.4142C34.012 38.8165 31.5022 40.8128 29.1604 42.252C27.2666 43.4158 25.3919 44.2714 23.7139 44.6322C22.1235 44.9743 20.1473 44.9757 18.7597 43.5881L4.41187 29.2403C3.29027 28.1187 3.08209 26.5973 3.21067 25.2783C3.34099 23.9415 3.8369 22.4852 4.54214 21.0277C5.96129 18.0948 8.43335 14.7382 11.5858 11.5858C14.7382 8.43335 18.0948 5.9613 21.0277 4.54214C22.4852 3.8369 23.9415 3.34099 25.2783 3.21067C26.5973 3.08209 28.1187 3.29028 29.2403 4.41187Z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-on-background text-lg font-bold leading-tight tracking-[-0.015em] font-title-lg uppercase tracking-wider text-xs">Audio Central v3.2 (STUDIO)</h2>
+</div>
+<div class="flex items-center gap-4 text-xs font-mono text-on-surface-variant">
+<span>SYS: OK</span>
+<span class="text-secondary">DANTE: SYNC</span>
+<span>CPU: 12%</span>
+</div>
+<div class="flex flex-1 justify-end gap-4">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded h-8 px-4 bg-error hover:bg-error-container text-on-error hover:text-on-error-container text-xs font-bold leading-normal transition-colors shadow-sm">
+<span class="material-symbols-outlined mr-2 text-[16px]">volume_off</span>
+<span class="truncate uppercase tracking-wider">Mute Geral</span>
+</button>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Left Sidebar: Audio Library -->
+<aside class="w-[300px] bg-surface-container flex flex-col border-r border-outline-variant shrink-0">
+<div class="p-4 flex flex-col h-full">
+<div class="flex gap-2 mb-4">
+<button class="flex-1 bg-primary text-on-primary text-xs font-bold uppercase rounded py-2 hover:bg-primary-container transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">add</span> Adicionar
+                    </button>
+<button class="flex-1 bg-surface-container-high border border-outline-variant text-on-background text-xs font-bold uppercase rounded py-2 hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-1">
+<span class="material-symbols-outlined text-[16px]">folder_open</span> Pastas
+                    </button>
+</div>
+<!-- Search -->
+<div class="relative mb-4">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-8 pr-2 py-1.5 text-xs text-on-background focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-outline font-mono" placeholder="Buscar áudio..." type="text"/>
+</div>
+<!-- Categories (Filters) -->
+<div class="flex flex-wrap gap-1 mb-4">
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-primary/20 text-primary border border-primary/30 hover:bg-primary/30">Músicas</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Instrumentais</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Fundos</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Vinhetas</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Efeitos</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Avisos</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Playbacks</button>
+<button class="px-2 py-1 text-[10px] uppercase tracking-wider font-bold rounded bg-surface-container-high text-on-surface-variant border border-outline-variant hover:text-on-background hover:border-outline">Trilhas</button>
+</div>
+<!-- List Headers -->
+<div class="grid grid-cols-[1fr_40px] gap-2 px-2 pb-1 border-b border-outline-variant text-[10px] text-outline uppercase font-bold tracking-wider mb-2">
+<div>Arquivo</div>
+<div class="text-right">Dur</div>
+</div>
+<!-- Library List -->
+<div class="flex-1 overflow-y-auto pr-1 flex flex-col gap-0.5">
+<!-- Item -->
+<div class="group flex items-center justify-between p-2 rounded bg-surface-container-lowest hover:bg-surface-container-high border border-transparent hover:border-outline-variant cursor-grab">
+<div class="flex flex-col min-w-0 mr-2">
+<span class="text-xs font-bold text-on-background truncate">Abertura Oficial</span>
+<span class="text-[10px] text-on-surface-variant truncate">Studio Prod • Vinhetas</span>
+</div>
+<div class="text-[10px] font-mono text-outline-variant group-hover:text-primary whitespace-nowrap">00:15</div>
+</div>
+<!-- Item -->
+<div class="group flex items-center justify-between p-2 rounded bg-surface-container-lowest hover:bg-surface-container-high border border-transparent hover:border-outline-variant cursor-grab">
+<div class="flex flex-col min-w-0 mr-2">
+<span class="text-xs font-bold text-on-background truncate">Fundo Oração Suave</span>
+<span class="text-[10px] text-on-surface-variant truncate">Teclado • Fundos</span>
+</div>
+<div class="text-[10px] font-mono text-outline-variant group-hover:text-primary whitespace-nowrap">12:30</div>
+</div>
+<!-- Item -->
+<div class="group flex items-center justify-between p-2 rounded bg-surface-container-lowest hover:bg-surface-container-high border border-transparent hover:border-outline-variant cursor-grab">
+<div class="flex flex-col min-w-0 mr-2">
+<span class="text-xs font-bold text-on-background truncate">Amazing Grace (Inst)</span>
+<span class="text-[10px] text-on-surface-variant truncate">Hillsong • Instrumentais</span>
+</div>
+<div class="text-[10px] font-mono text-outline-variant group-hover:text-primary whitespace-nowrap">04:23</div>
+</div>
+<div class="group flex items-center justify-between p-2 rounded bg-surface-container-lowest hover:bg-surface-container-high border border-transparent hover:border-outline-variant cursor-grab opacity-50">
+<div class="flex flex-col min-w-0 mr-2">
+<span class="text-xs font-bold text-on-background truncate line-through">Alerta de Emergência</span>
+<span class="text-[10px] text-error truncate">Arquivo Ausente</span>
+</div>
+<div class="text-[10px] font-mono text-outline-variant whitespace-nowrap">--:--</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col bg-background min-w-[600px] border-r border-outline-variant">
+<!-- Top Player Section (Master Deck) -->
+<section class="h-[220px] bg-surface border-b border-outline-variant flex flex-col shrink-0 p-4 relative overflow-hidden">
+<!-- Background Info -->
+<div class="absolute inset-0 opacity-5 pointer-events-none flex items-center justify-center">
+<span class="text-[150px] font-bold font-mono tracking-tighter">PLAYING</span>
+</div>
+<div class="flex justify-between items-start z-10">
+<div class="flex items-center gap-2">
+<div class="px-2 py-0.5 bg-error text-on-error text-[10px] font-bold uppercase tracking-widest rounded flex items-center gap-1 animate-pulse">
+<div class="w-1.5 h-1.5 rounded-full bg-white"></div>
+<span>Tocando Agora</span>
+</div>
+<span class="text-xs font-mono text-outline">OUT: MAIN (DANTE 1-2)</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-right">
+<div class="text-[10px] text-outline uppercase font-bold tracking-wider">Restante</div>
+<div class="text-3xl font-mono font-bold text-primary leading-none">-03:05.6</div>
+</div>
+</div>
+</div>
+<div class="flex-1 flex items-end gap-6 z-10 pb-2">
+<div class="flex-1">
+<h2 class="text-4xl font-black text-on-background tracking-tight truncate">Amazing Grace (Live)</h2>
+<h3 class="text-xl font-medium text-on-surface-variant truncate">Worship Band Vol. 4</h3>
+</div>
+<div class="text-right">
+<div class="text-[10px] text-outline uppercase font-bold tracking-wider">Decorrido / Total</div>
+<div class="text-xl font-mono font-bold text-on-background flex items-baseline gap-1">
+<span>01:17.4</span>
+<span class="text-sm text-outline-variant">/ 04:23.0</span>
+</div>
+</div>
+</div>
+<!-- Waveform area (abstracted data view) -->
+<div class="h-16 w-full bg-surface-container-lowest border border-outline-variant rounded relative flex items-center z-10">
+<div class="absolute inset-0 waveform-mask opacity-70">
+<div class="w-full h-full bg-gradient-to-r from-primary via-secondary to-primary" style="mask-image: repeating-linear-gradient(90deg, #000 0px, #000 2px, transparent 2px, transparent 4px);"></div>
+</div>
+<div class="absolute left-[30%] top-0 bottom-0 w-0.5 bg-error z-20 shadow-[0_0_10px_#ef4444]"></div>
+<div class="absolute left-0 top-0 bottom-0 bg-primary/20 w-[30%] z-10"></div>
+</div>
+<!-- Controls -->
+<div class="flex items-center justify-center gap-4 mt-4 z-10">
+<button class="h-10 px-4 bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded text-on-surface-variant hover:text-on-background flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[20px]">skip_previous</span>
+</button>
+<button class="size-12 bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-full text-on-surface-variant hover:text-on-background flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[24px]">stop</span>
+</button>
+<button class="size-12 bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded-full text-on-surface-variant hover:text-on-background flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[24px]">pause</span>
+</button>
+<button class="size-14 bg-secondary text-on-primary rounded-full hover:bg-secondary-container shadow-[0_0_15px_rgba(16,185,129,0.4)] flex items-center justify-center transition-all">
+<span class="material-symbols-outlined text-[36px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+<button class="h-10 px-4 bg-surface-container hover:bg-surface-container-high border border-outline-variant rounded text-on-surface-variant hover:text-on-background flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-[20px]">skip_next</span>
+</button>
+<div class="w-px h-8 bg-outline-variant mx-2"></div>
+<button class="h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-surface-container border border-outline-variant rounded text-on-surface-variant hover:text-on-background hover:bg-surface-container-high">Fade In</button>
+<button class="h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-surface-container border border-outline-variant rounded text-on-surface-variant hover:text-on-background hover:bg-surface-container-high">Fade Out</button>
+<button class="h-8 px-3 text-[10px] font-bold uppercase tracking-wider bg-surface-container border border-outline-variant rounded text-on-surface-variant hover:text-on-background hover:bg-surface-container-high">Loop</button>
+</div>
+</section>
+<!-- Central Panel: Playlist / Queue -->
+<section class="flex-1 flex flex-col bg-surface-container-lowest">
+<div class="flex justify-between items-center px-4 py-2 bg-surface-container border-b border-outline-variant">
+<div class="flex items-center gap-3 text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-[16px] text-outline">queue_music</span>
+<span>Fila de Reprodução</span>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high border border-outline-variant px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-on-background">Auto-Play: ON</button>
+<button class="bg-surface-container-high border border-outline-variant px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-on-surface-variant hover:text-on-background">Limpar Fila</button>
+</div>
+</div>
+<!-- Table Header -->
+<div class="grid grid-cols-[30px_30px_1fr_200px_80px_80px_100px_100px] gap-2 px-4 py-2 border-b border-outline-variant text-[10px] font-bold text-outline uppercase tracking-wider bg-surface-container-low">
+<div>Pos</div>
+<div></div>
+<div>Título</div>
+<div>Artista</div>
+<div>Dur.</div>
+<div>Restante</div>
+<div>Status</div>
+<div>Vol.</div>
+</div>
+<!-- List -->
+<div class="flex-1 overflow-y-auto">
+<!-- Item 1 (Playing) -->
+<div class="playing-active grid grid-cols-[30px_30px_1fr_200px_80px_80px_100px_100px] gap-2 px-4 py-2 items-center border-b border-outline-variant cursor-default">
+<div class="text-xs font-mono font-bold text-primary">01</div>
+<div class="text-primary"><span class="material-symbols-outlined text-[16px]">volume_up</span></div>
+<div class="text-sm font-bold text-on-background truncate">Amazing Grace (Live)</div>
+<div class="text-xs text-on-surface-variant truncate">Worship Band Vol. 4</div>
+<div class="text-xs font-mono text-outline">04:23</div>
+<div class="text-xs font-mono font-bold text-primary">-03:05</div>
+<div><span class="px-1.5 py-0.5 bg-primary/20 text-primary text-[9px] font-bold uppercase rounded border border-primary/30">Tocando</span></div>
+<div class="flex items-center gap-1">
+<input class="w-full h-1" max="100" min="0" type="range" value="100"/>
+</div>
+</div>
+<!-- Item 2 (Queued) -->
+<div class="grid grid-cols-[30px_30px_1fr_200px_80px_80px_100px_100px] gap-2 px-4 py-2 items-center border-b border-outline-variant bg-surface-container hover:bg-surface-container-high cursor-grab">
+<div class="text-xs font-mono text-outline-variant">02</div>
+<div class="text-outline-variant"><span class="material-symbols-outlined text-[16px]">drag_indicator</span></div>
+<div class="text-sm font-bold text-on-background truncate">Build My Life</div>
+<div class="text-xs text-on-surface-variant truncate">Housefires</div>
+<div class="text-xs font-mono text-outline">08:12</div>
+<div class="text-xs font-mono text-outline-variant">--:--</div>
+<div><span class="px-1.5 py-0.5 bg-surface-container-highest text-on-surface-variant text-[9px] font-bold uppercase rounded border border-outline-variant">Carregada</span></div>
+<div class="flex items-center gap-1">
+<input class="w-full h-1" max="100" min="0" type="range" value="90"/>
+</div>
+</div>
+<!-- Item 3 (Queued) -->
+<div class="grid grid-cols-[30px_30px_1fr_200px_80px_80px_100px_100px] gap-2 px-4 py-2 items-center border-b border-outline-variant bg-surface hover:bg-surface-container-high cursor-grab">
+<div class="text-xs font-mono text-outline-variant">03</div>
+<div class="text-outline-variant"><span class="material-symbols-outlined text-[16px]">drag_indicator</span></div>
+<div class="text-sm font-bold text-on-background truncate">Fundo Oração Suave</div>
+<div class="text-xs text-on-surface-variant truncate">Teclado</div>
+<div class="text-xs font-mono text-outline">12:30</div>
+<div class="text-xs font-mono text-outline-variant">--:--</div>
+<div><span class="px-1.5 py-0.5 bg-surface-container-highest text-on-surface-variant text-[9px] font-bold uppercase rounded border border-outline-variant">Aguardando</span></div>
+<div class="flex items-center gap-1">
+<input class="w-full h-1" max="100" min="0" type="range" value="75"/>
+</div>
+</div>
+<!-- Drop Zone -->
+<div class="m-4 p-8 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center text-outline-variant bg-surface-container-lowest/50">
+<span class="material-symbols-outlined text-[32px] mb-2">post_add</span>
+<span class="text-sm font-bold uppercase tracking-wider">Arraste áudios para cá para adicionar à fila</span>
+</div>
+</div>
+</section>
+<!-- Footer: Soundboard (Quick Triggers) -->
+<section class="h-[240px] bg-surface-container border-t border-outline-variant flex flex-col shrink-0">
+<div class="flex items-center justify-between px-4 py-2 bg-surface-container-high border-b border-outline-variant">
+<div class="flex items-center gap-4">
+<h3 class="text-xs font-bold uppercase tracking-wider text-on-background">Biblioteca de Arquivos</h3>
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2 top-1/2 -translate-y-1/2 text-outline text-[14px]">search</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded pl-8 pr-2 py-1 text-[11px] text-on-background focus:border-primary outline-none" placeholder="Buscar na biblioteca..." type="text"/>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-primary text-on-primary text-[10px] font-bold uppercase rounded hover:bg-primary-container transition-colors">Adicionar</button>
+<button class="px-3 py-1 bg-surface-container-highest border border-outline-variant text-on-background text-[10px] font-bold uppercase rounded hover:bg-surface-container-high transition-colors">Pastas</button>
+</div>
+</div>
+<div class="flex flex-1 overflow-hidden">
+<div class="w-48 border-r border-outline-variant p-2 flex flex-col gap-1 overflow-y-auto bg-surface-container-low">
+<button class="text-left px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded bg-primary/10 text-primary">Músicas</button>
+<button class="text-left px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded text-on-surface-variant hover:bg-surface-container-high">Instrumentais</button>
+<button class="text-left px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded text-on-surface-variant hover:bg-surface-container-high">Fundos</button>
+<button class="text-left px-2 py-1.5 text-[10px] font-bold uppercase tracking-wider rounded text-on-surface-variant hover:bg-surface-container-high">Vinhetas</button>
+</div>
+<div class="flex-1 overflow-y-auto p-2">
+<div class="grid grid-cols-4 gap-2">
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary cursor-grab flex flex-col">
+<span class="text-xs font-bold text-on-background truncate">Abertura Oficial</span>
+<span class="text-[9px] text-outline">00:15 • Studio Prod</span>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary cursor-grab flex flex-col">
+<span class="text-xs font-bold text-on-background truncate">Fundo Oração Suave</span>
+<span class="text-[9px] text-outline">12:30 • Teclado</span>
+</div>
+<div class="p-2 rounded bg-surface-container-lowest border border-outline-variant hover:border-primary cursor-grab flex flex-col">
+<span class="text-xs font-bold text-on-background truncate">Amazing Grace (Inst)</span>
+<span class="text-[9px] text-outline">04:23 • Hillsong</span>
+</div>
+</div>
+</div>
+</div>
+</section><footer class="h-[120px] bg-surface-container-high border-t border-outline-variant shrink-0 p-2 flex gap-2 overflow-x-auto">
+<div class="flex flex-col justify-center px-2 mr-2 border-r border-outline-variant min-w-[80px]">
+<span class="text-[10px] font-bold uppercase text-outline tracking-wider mb-1">Soundboard</span>
+<span class="text-[10px] text-on-surface-variant">Disparos Rápidos</span>
+</div>
+<!-- Trigger Button -->
+<button class="w-[120px] flex-shrink-0 bg-surface border border-outline-variant rounded p-2 flex flex-col justify-between hover:border-primary group hover:bg-surface-container transition-all text-left relative overflow-hidden">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-[16px] text-primary">bolt</span>
+<span class="text-[9px] font-mono text-outline">00:05</span>
+</div>
+<span class="text-xs font-bold text-on-background truncate mt-1">Aplausos Curto</span>
+<div class="absolute bottom-0 left-0 h-0.5 bg-primary w-0 group-hover:w-full transition-all duration-300"></div>
+</button>
+<!-- Trigger Button -->
+<button class="w-[120px] flex-shrink-0 bg-surface border border-outline-variant rounded p-2 flex flex-col justify-between hover:border-tertiary group hover:bg-surface-container transition-all text-left relative overflow-hidden">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-[16px] text-tertiary">campaign</span>
+<span class="text-[9px] font-mono text-outline">00:12</span>
+</div>
+<span class="text-xs font-bold text-on-background leading-tight mt-1">Vinheta Abertura Culto</span>
+<div class="absolute bottom-0 left-0 h-0.5 bg-tertiary w-0 group-hover:w-full transition-all duration-300"></div>
+</button>
+<!-- Trigger Button -->
+<button class="w-[120px] flex-shrink-0 bg-surface border border-outline-variant rounded p-2 flex flex-col justify-between hover:border-secondary group hover:bg-surface-container transition-all text-left relative overflow-hidden">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-[16px] text-secondary">notifications_active</span>
+<span class="text-[9px] font-mono text-outline">00:03</span>
+</div>
+<span class="text-xs font-bold text-on-background truncate mt-1">Sino Alerta</span>
+<div class="absolute bottom-0 left-0 h-0.5 bg-secondary w-0 group-hover:w-full transition-all duration-300"></div>
+</button>
+<!-- Empty Trigger Slot -->
+<button class="w-[120px] flex-shrink-0 bg-surface-container-lowest border border-dashed border-outline-variant rounded p-2 flex items-center justify-center hover:bg-surface-container transition-all text-outline-variant">
+<span class="material-symbols-outlined">add</span>
+</button>
+</footer>
+</main>
+<!-- Right Sidebar: Technical Panel -->
+</div>
+</body></html>
