@@ -8,6 +8,13 @@ on:
 
 # Windows é a plataforma principal de produção: quebrar o build Windows é
 # tratado como build quebrado (Seção 8 do plano).
+#
+# A partir da Fase 1 (Marco 1.0) o CI também compila o alvo GUI `app` (Qt Quick)
+# e resolve ffmpeg + miniaudio via vcpkg. O build do ffmpeg é pesado, então
+# habilitamos o cache binário do vcpkg (backend do GitHub Actions).
+env:
+  VCPKG_BINARY_SOURCES: "clear;x-gha,readwrite"
+
 jobs:
   build-and-test:
     name: ${{ matrix.name }}
@@ -30,10 +37,31 @@ jobs:
       - name: Install Ninja
         uses: seanmiddleditch/gha-setup-ninja@v5
 
+      # Qt 6 (open-source, LGPL) — release estável corrente (>= 6.9, ver ADR-0001).
+      # Fornece Qt Quick/QML para o alvo `app`. Exporta CMAKE_PREFIX_PATH abaixo.
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: "6.9.1"
+          cache: true
+
       # Ninja + MSVC precisa do ambiente de desenvolvedor do Visual Studio no PATH.
       - name: Setup MSVC environment (Windows)
         if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
+
+      # Aponta o find_package(Qt6) para a instalação acima.
+      - name: Point CMake to Qt
+        shell: bash
+        run: echo "CMAKE_PREFIX_PATH=$QT_ROOT_DIR" >> "$GITHUB_ENV"
+
+      # Expõe as credenciais do cache de Actions para o backend x-gha do vcpkg.
+      - name: Export GitHub Actions cache env (vcpkg binary cache)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.exportVariable('ACTIONS_CACHE_URL', process.env.ACTIONS_CACHE_URL || '');
+            core.exportVariable('ACTIONS_RUNTIME_TOKEN', process.env.ACTIONS_RUNTIME_TOKEN || '');
 
       # Usa o vcpkg já pré-instalado nos runners (evita bootstrap frágil).
       - name: Point to preinstalled vcpkg

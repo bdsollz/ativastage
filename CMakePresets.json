@@ -20,7 +20,10 @@
       "inherits": "base",
       "displayName": "macOS Debug",
       "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin" },
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "ATIVASTAGE_BUILD_APP": "ON"
+      }
     },
     {
       "name": "mac-release",
@@ -37,7 +40,10 @@
       "inherits": "base",
       "displayName": "Windows Debug",
       "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
-      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "ATIVASTAGE_BUILD_APP": "ON"
+      }
     },
     {
       "name": "win-release",

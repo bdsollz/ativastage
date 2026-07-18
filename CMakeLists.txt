@@ -36,7 +36,7 @@ endif()
 # Qt é resolvido via CMAKE_PREFIX_PATH (definido nos presets). Só é exigido
 # quando ATIVASTAGE_BUILD_APP=ON, para manter a Fase 0 leve.
 if(ATIVASTAGE_BUILD_APP)
-    find_package(Qt6 REQUIRED COMPONENTS Core Gui Quick)
+    find_package(Qt6 REQUIRED COMPONENTS Core Gui Qml Quick)
     qt_standard_project_setup(REQUIRES 6.5)
 endif()
 

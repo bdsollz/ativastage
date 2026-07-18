@@ -3,7 +3,7 @@
 > Checkpoint vivo para retomada entre sessões. Como/quando atualizar:
 > [`docs/METODO_ESTADO.md`](docs/METODO_ESTADO.md).
 
-- **Última atualização:** 2026-07-17 23:16 (-03)
+- **Última atualização:** 2026-07-18 (plano da Fase 1 escrito — ver `docs/plan/PLANO_FASE_1.md`)
 - **Fase corrente:** Fase 0 — Fundação **CONCLUÍDA ✅** (CI verde nas 2 plataformas,
   run `ec3d0c8`, 2m18s). Próxima: Fase 1 — Prova audiovisual.
 - **Versão:** 0.0.1 (ver arquivo `VERSION`)
@@ -61,6 +61,11 @@
    pode entrar junto da Fase 9).
 
 ## Próxima fase — Fase 1 (Prova audiovisual) ⚠ fase de risco
+
+**Plano de implementação detalhado: [`docs/plan/PLANO_FASE_1.md`](docs/plan/PLANO_FASE_1.md)**
+(marcos 1.0–1.6, ordem, arquivos, critérios de aceite, matriz de HW, gate). Retomada:
+começar pelo Marco 1.0 (reintroduzir ffmpeg+miniaudio no `vcpkg.json`, criar
+`src/app/CMakeLists.txt`, ligar `ATIVASTAGE_BUILD_APP`, reabilitar Qt no CI).
 
 Objetivo: provar o núcleo difícil antes de tudo. Entregas:
 - Alvo GUI `app` (Qt Quick) — cria `src/app/CMakeLists.txt`; a partir daqui o
