@@ -46,6 +46,11 @@ struct AudioFileDecoder::Impl {
         if (dec) avcodec_free_context(&dec);
         if (fmt) avformat_close_input(&fmt);
     }
+
+    // These are members (not free functions) because Impl is a private nested
+    // type: a namespace-scope helper could not name it.
+    void convertFrame(AVFrame* f, int targetChannels, int targetRate);
+    bool decodeMore(int targetChannels, int targetRate);
 };
 
 AudioFileDecoder::AudioFileDecoder() = default;
@@ -130,75 +135,84 @@ bool AudioFileDecoder::open(const std::string& path, int targetSampleRate, int t
 }
 
 // Converts one decoded frame into interleaved float, appended to `pending`.
-static void convertFrame(AudioFileDecoder::Impl* impl, AVFrame* frame,
-                         int targetChannels, int targetRate) {
-    const int64_t delay = swr_get_delay(impl->swr, frame->sample_rate);
+void AudioFileDecoder::Impl::convertFrame(AVFrame* f, int targetChannels,
+                                          int targetRate) {
+    const int64_t delay = swr_get_delay(swr, f->sample_rate);
     const int outCount = static_cast<int>(av_rescale_rnd(
-        delay + frame->nb_samples, targetRate,
-        frame->sample_rate ? frame->sample_rate : targetRate, AV_ROUND_UP));
+        delay + f->nb_samples, targetRate,
+        f->sample_rate ? f->sample_rate : targetRate, AV_ROUND_UP));
     const std::size_t needed =
-        static_cast<std::size_t>(outCount) * targetChannels * sizeof(float);
-    if (impl->scratch.size() < needed) {
-        impl->scratch.resize(needed);
+        static_cast<std::size_t>(outCount) * static_cast<std::size_t>(targetChannels) *
+        sizeof(float);
+    if (scratch.size() < needed) {
+        scratch.resize(needed);
     }
-    uint8_t* outPtr = impl->scratch.data();
+    uint8_t* outPtr = scratch.data();
     const int converted = swr_convert(
-        impl->swr, &outPtr, outCount,
-        const_cast<const uint8_t**>(frame->extended_data), frame->nb_samples);
+        swr, &outPtr, outCount,
+        const_cast<const uint8_t**>(f->extended_data), f->nb_samples);
     if (converted > 0) {
-        const float* fp = reinterpret_cast<const float*>(impl->scratch.data());
-        impl->pending.insert(
-            impl->pending.end(), fp,
-            fp + static_cast<std::size_t>(converted) * targetChannels);
+        const float* fp = reinterpret_cast<const float*>(scratch.data());
+        pending.insert(pending.end(), fp,
+                       fp + static_cast<std::size_t>(converted) *
+                                static_cast<std::size_t>(targetChannels));
     }
 }
 
 // Pulls and decodes until `pending` gains samples or EOF is fully drained.
 // Returns true if any samples were produced.
-static bool decodeMore(AudioFileDecoder::Impl* impl, int targetChannels, int targetRate) {
-    if (impl->eofDrained) {
+bool AudioFileDecoder::Impl::decodeMore(int targetChannels, int targetRate) {
+    if (eofDrained) {
         return false;
     }
     for (;;) {
-        int rc = av_read_frame(impl->fmt, impl->pkt);
+        int rc = av_read_frame(fmt, pkt);
         if (rc < 0) {
             // EOF: flush the decoder, then the resampler.
-            avcodec_send_packet(impl->dec, nullptr);
-            while (avcodec_receive_frame(impl->dec, impl->frame) == 0) {
-                convertFrame(impl, impl->frame, targetChannels, targetRate);
-                av_frame_unref(impl->frame);
+            avcodec_send_packet(dec, nullptr);
+            while (avcodec_receive_frame(dec, frame) == 0) {
+                convertFrame(frame, targetChannels, targetRate);
+                av_frame_unref(frame);
             }
-            uint8_t* outPtr = impl->scratch.data();
+            // Ensure the scratch buffer can hold a flush block.
+            const std::size_t minScratch =
+                static_cast<std::size_t>(4096) *
+                static_cast<std::size_t>(targetChannels) * sizeof(float);
+            if (scratch.size() < minScratch) {
+                scratch.resize(minScratch);
+            }
+            uint8_t* outPtr = scratch.data();
             int flushed = 0;
             do {
                 const int cap = static_cast<int>(
-                    impl->scratch.size() / (targetChannels * sizeof(float)));
-                flushed = swr_convert(impl->swr, &outPtr, cap, nullptr, 0);
+                    scratch.size() /
+                    (static_cast<std::size_t>(targetChannels) * sizeof(float)));
+                flushed = swr_convert(swr, &outPtr, cap, nullptr, 0);
                 if (flushed > 0) {
-                    const float* fp = reinterpret_cast<const float*>(impl->scratch.data());
-                    impl->pending.insert(
-                        impl->pending.end(), fp,
-                        fp + static_cast<std::size_t>(flushed) * targetChannels);
+                    const float* fp = reinterpret_cast<const float*>(scratch.data());
+                    pending.insert(pending.end(), fp,
+                                   fp + static_cast<std::size_t>(flushed) *
+                                            static_cast<std::size_t>(targetChannels));
                 }
             } while (flushed > 0);
-            impl->eofDrained = true;
-            return !impl->pending.empty();
+            eofDrained = true;
+            return !pending.empty();
         }
 
-        if (impl->pkt->stream_index != impl->streamIndex) {
-            av_packet_unref(impl->pkt);
+        if (pkt->stream_index != streamIndex) {
+            av_packet_unref(pkt);
             continue;
         }
 
-        rc = avcodec_send_packet(impl->dec, impl->pkt);
-        av_packet_unref(impl->pkt);
+        rc = avcodec_send_packet(dec, pkt);
+        av_packet_unref(pkt);
         if (rc < 0) {
             continue;
         }
         bool produced = false;
-        while (avcodec_receive_frame(impl->dec, impl->frame) == 0) {
-            convertFrame(impl, impl->frame, targetChannels, targetRate);
-            av_frame_unref(impl->frame);
+        while (avcodec_receive_frame(dec, frame) == 0) {
+            convertFrame(frame, targetChannels, targetRate);
+            av_frame_unref(frame);
             produced = true;
         }
         if (produced) {
@@ -218,7 +232,7 @@ std::size_t AudioFileDecoder::readFrames(float* out, std::size_t maxFrames) {
         if (impl_->cursor >= impl_->pending.size()) {
             impl_->pending.clear();
             impl_->cursor = 0;
-            if (!decodeMore(impl_, targetChannels_, targetSampleRate_)) {
+            if (!impl_->decodeMore(targetChannels_, targetSampleRate_)) {
                 break; // EOF and nothing left
             }
             if (impl_->pending.empty()) {

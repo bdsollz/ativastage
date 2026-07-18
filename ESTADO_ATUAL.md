@@ -67,6 +67,14 @@
 (marcos 1.0–1.6, ordem, arquivos, critérios de aceite, matriz de HW, gate).
 
 **Progresso (branch `phase/1-av-proof`):**
+- **CI observado via API pública** (sem depender de tela):
+  `https://api.github.com/repos/bdsollz/ativastage/actions/runs?branch=phase%2F1-av-proof&per_page=1&page=N`
+  → e `/actions/runs/<id>/jobs` para o passo que falhou. Útil para retomada.
+- **Runs #7 e #8 falharam** no passo *Build* (Configure sempre verde ⇒ CMake e
+  `find_package` corretos). Causa: em `AudioFileDecoder.cpp`, funções livres
+  recebiam `AudioFileDecoder::Impl*`, que é **tipo nested privado** → erro de
+  compilação. **Corrigido**: viraram métodos de `Impl`. Verificado com headers-stub
+  de FFmpeg/miniaudio (`-fsyntax-only`) + repro isolado do erro.
 - **Marco 1.0 — no GitHub** (commit `83a8994`): ffmpeg+miniaudio de volta no
   `vcpkg.json`; alvo Qt Quick `app` (`src/app/`, janela vazia); `ATIVASTAGE_BUILD_APP=ON`
   nos presets debug; Qt 6.9.1 + cache binário do vcpkg no CI. ⚠ **Falta confirmar
